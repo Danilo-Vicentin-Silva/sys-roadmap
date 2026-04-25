@@ -54,6 +54,8 @@ export const translations = {
     nodeCompleted: "Completed",
     nodeInProgress: "In Progress",
     nodeTodo: "To Do",
+    nodeMarkComplete: "Mark Complete",
+    nodeMarkIncomplete: "Mark Incomplete",
 
     // Node panel
     panelTheory: "Theory",
@@ -139,7 +141,8 @@ export const translations = {
     homeTitle: "Ecossistemas de Tecnologia Corporativa",
     homeSubtitle:
       "Trilhas de aprendizado estruturadas para adoção de tecnologia corporativa. Clique em qualquer trilha para explorar o roadmap completo.",
-    communityNote: "Trilhas orientadas pela comunidade para profissionais corporativos.",
+    communityNote:
+      "Trilhas orientadas pela comunidade para profissionais corporativos.",
 
     // Card categories
     catSapKeyUser: "Trilhas SAP Key User",
@@ -173,7 +176,8 @@ export const translations = {
     descPowerBI: "Modelagem de dados, DAX, relatórios e compartilhamento",
     descJira: "Rastreamento ágil de projetos, sprints e backlog",
     descServiceNow: "ITSM, incidentes e fluxos de gestão de mudanças",
-    descSharePoint: "Intranet, bibliotecas de documentos e integração Power Automate",
+    descSharePoint:
+      "Intranet, bibliotecas de documentos e integração Power Automate",
 
     // Roadmap view
     backToHome: "Voltar aos Roadmaps",
@@ -181,6 +185,8 @@ export const translations = {
     nodeCompleted: "Concluído",
     nodeInProgress: "Em Progresso",
     nodeTodo: "A Fazer",
+    nodeMarkComplete: "Marcar Concluído",
+    nodeMarkIncomplete: "Desmarcar Concluído",
 
     // Node panel
     panelTheory: "Teoria",

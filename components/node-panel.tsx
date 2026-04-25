@@ -1,11 +1,12 @@
 "use client"
 
-import { X, BookOpen, Database, CheckSquare, Square } from "lucide-react"
+import { X, BookOpen, Database, CheckSquare, Square, Check } from "lucide-react"
 import { useLang } from "@/lib/lang-context"
 import { nodeDetails } from "@/lib/roadmap-data"
 import type { RoadmapNode } from "@/lib/roadmap-data"
 import { translations } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
+import { useProgress } from "@/hooks/use-progress"
 
 interface NodePanelProps {
   node: RoadmapNode | null
@@ -13,9 +14,9 @@ interface NodePanelProps {
 }
 
 const statusColors: Record<string, string> = {
-  done:          "var(--neon-yellow)",
+  done: "var(--neon-yellow)",
   "in-progress": "var(--neon-green)",
-  todo:          "var(--muted-foreground)",
+  todo: "var(--muted-foreground)",
 }
 
 const statusLabels: Record<string, keyof (typeof translations)["en"]> = {
@@ -26,6 +27,13 @@ const statusLabels: Record<string, keyof (typeof translations)["en"]> = {
 
 export function NodePanel({ node, onClose }: NodePanelProps) {
   const { t, lang } = useLang()
+  const {
+    completedNodes,
+    completedChecklist,
+    toggleNodeProgress,
+    toggleChecklistItem,
+    isLoading,
+  } = useProgress()
 
   if (!node) return null
 
@@ -35,9 +43,14 @@ export function NodePanel({ node, onClose }: NodePanelProps) {
   const title = t[detail.titleKey] as string
   const theory = t[detail.theoryKey] as string
   const technical = t[detail.technicalKey] as string
-  const checklist = translations[lang][detail.checklistKey] as unknown as string[]
+  const checklist = translations[lang][
+    detail.checklistKey
+  ] as unknown as string[]
   const statusColor = statusColors[node.status]
   const statusLabel = t[statusLabels[node.status]] as string
+  const isCompleted = completedNodes.includes(node.id)
+  const nodeChecklist = completedChecklist[node.id] || []
+  const completedCount = nodeChecklist.length
 
   return (
     <>
@@ -66,8 +79,36 @@ export function NodePanel({ node, onClose }: NodePanelProps) {
               >
                 {statusLabel}
               </span>
+              {/* Completion checkbox */}
+              <button
+                onClick={() => toggleNodeProgress(node.id)}
+                disabled={isLoading}
+                className={cn(
+                  "inline-flex items-center gap-1.5 rounded-sm border px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-widest transition-colors",
+                  isCompleted
+                    ? "border-neon-green bg-neon-green/20 text-neon-green"
+                    : "border-muted-foreground text-muted-foreground hover:border-foreground hover:text-foreground",
+                )}
+                aria-label={
+                  isCompleted ? t.nodeMarkIncomplete : t.nodeMarkComplete
+                }
+              >
+                {isCompleted ? (
+                  <>
+                    <Check className="h-3 w-3" />
+                    {t.nodeCompleted}
+                  </>
+                ) : (
+                  <>
+                    <Square className="h-3 w-3" />
+                    {t.nodeMarkComplete}
+                  </>
+                )}
+              </button>
             </div>
-            <h2 className="font-mono text-xl font-bold text-foreground text-pretty">{title}</h2>
+            <h2 className="font-mono text-xl font-bold text-foreground text-pretty">
+              {title}
+            </h2>
           </div>
           <button
             onClick={onClose}
@@ -88,7 +129,9 @@ export function NodePanel({ node, onClose }: NodePanelProps) {
                 {t.panelTheory}
               </h3>
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">{theory}</p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {theory}
+            </p>
           </section>
 
           {/* Technical */}
@@ -100,26 +143,66 @@ export function NodePanel({ node, onClose }: NodePanelProps) {
               </h3>
             </div>
             <div className="rounded-sm border border-border bg-secondary p-3">
-              <p className="font-mono text-xs text-muted-foreground leading-relaxed">{technical}</p>
+              <p className="font-mono text-xs text-muted-foreground leading-relaxed">
+                {technical}
+              </p>
             </div>
           </section>
 
           {/* Checklist */}
           <section>
-            <div className="flex items-center gap-2 mb-3">
-              <CheckSquare className="h-4 w-4 text-neon-blue" aria-hidden />
-              <h3 className="font-mono text-sm font-bold uppercase tracking-wider text-neon-blue">
-                {t.panelChecklist}
-              </h3>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <CheckSquare className="h-4 w-4 text-neon-blue" aria-hidden />
+                <h3 className="font-mono text-sm font-bold uppercase tracking-wider text-neon-blue">
+                  {t.panelChecklist}
+                </h3>
+              </div>
+              {completedCount > 0 && (
+                <span className="font-mono text-xs text-neon-green">
+                  {completedCount}/{checklist?.length || 0}
+                </span>
+              )}
             </div>
             <ul className="space-y-2">
               {Array.isArray(checklist) &&
-                checklist.map((item: string, i: number) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <Square className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
-                    <span className="text-sm text-muted-foreground leading-relaxed">{item}</span>
-                  </li>
-                ))}
+                checklist.map((item: string, i: number) => {
+                  const itemCompleted = nodeChecklist.includes(String(i))
+                  return (
+                    <li
+                      key={i}
+                      className={cn(
+                        "flex items-start gap-3 cursor-pointer transition-colors rounded-sm p-1 -m-1 hover:bg-secondary/50",
+                        itemCompleted && "text-foreground",
+                      )}
+                      onClick={() =>
+                        !isLoading && toggleChecklistItem(node.id, String(i))
+                      }
+                    >
+                      {itemCompleted ? (
+                        <Check
+                          className="mt-0.5 h-4 w-4 shrink-0 text-neon-green"
+                          aria-hidden
+                        />
+                      ) : (
+                        <Square
+                          className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground"
+                          aria-hidden
+                        />
+                      )}
+                      <span
+                        className={cn(
+                          "text-sm leading-relaxed",
+                          itemCompleted
+                            ? "text-foreground line-through opacity-70"
+                            : "text-muted-foreground",
+                        )}
+                      >
+                        {item}
+                      </span>
+                    </li>
+                  )
+                })}
             </ul>
           </section>
         </div>

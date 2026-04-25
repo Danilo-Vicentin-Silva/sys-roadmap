@@ -19,6 +19,8 @@ import {
 import { Header } from "@/components/header"
 import { RoadmapCard } from "@/components/roadmap-card"
 import { useLang } from "@/lib/lang-context"
+import { useProgress } from "@/hooks/use-progress"
+import { roadmaps } from "@/lib/roadmap-data"
 import type { Translations } from "@/lib/i18n"
 import type { LucideIcon } from "lucide-react"
 
@@ -32,28 +34,153 @@ interface CardDef {
   doneNodes: number
 }
 
-const cardDefs: CardDef[] = [
-  // SAP Key User
-  { id: "sap-mm",         titleKey: "cardSapMM",            descKey: "descSapMM",         Icon: Package,     accentColor: "#eeff00", totalNodes: 7, doneNodes: 2 },
-  { id: "sap-sd",         titleKey: "cardSapSD",            descKey: "descSapSD",         Icon: ShoppingCart,accentColor: "#eeff00", totalNodes: 7, doneNodes: 0 },
-  { id: "sap-fi",         titleKey: "cardSapFI",            descKey: "descSapFI",         Icon: DollarSign,  accentColor: "#eeff00", totalNodes: 7, doneNodes: 0 },
-  // SAP Consultant
-  { id: "sap-consultant-mm", titleKey: "cardSapConsultantMM", descKey: "descSapConsultantMM", Icon: Briefcase, accentColor: "#00bfff", totalNodes: 9, doneNodes: 0 },
-  { id: "sap-consultant-sd", titleKey: "cardSapConsultantSD", descKey: "descSapConsultantSD", Icon: Layers,    accentColor: "#00bfff", totalNodes: 9, doneNodes: 0 },
-  { id: "sap-consultant-fi", titleKey: "cardSapConsultantFI", descKey: "descSapConsultantFI", Icon: BarChart3, accentColor: "#00bfff", totalNodes: 9, doneNodes: 0 },
-  // Microsoft Power Platform
-  { id: "power-apps",     titleKey: "cardPowerApps",        descKey: "descPowerApps",     Icon: Zap,         accentColor: "#00ff88", totalNodes: 7, doneNodes: 2 },
-  { id: "power-automate", titleKey: "cardPowerAutomate",    descKey: "descPowerAutomate", Icon: GitBranch,   accentColor: "#00ff88", totalNodes: 7, doneNodes: 0 },
-  { id: "power-bi",       titleKey: "cardPowerBI",          descKey: "descPowerBI",       Icon: BarChart3,   accentColor: "#00ff88", totalNodes: 7, doneNodes: 0 },
-  // Demand & Service
-  { id: "jira",           titleKey: "cardJira",             descKey: "descJira",          Icon: TicketCheck, accentColor: "#ff6b6b", totalNodes: 6, doneNodes: 0 },
-  { id: "servicenow",     titleKey: "cardServiceNow",       descKey: "descServiceNow",    Icon: Settings,    accentColor: "#ff6b6b", totalNodes: 6, doneNodes: 0 },
-  { id: "sharepoint",     titleKey: "cardSharePoint",       descKey: "descSharePoint",    Icon: FileText,    accentColor: "#ff6b6b", totalNodes: 6, doneNodes: 0 },
-]
+// Build card definitions with real progress data
+function buildCardDefs(
+  completedChecklist: Record<string, string[]>,
+): CardDef[] {
+  const cards: CardDef[] = [
+    // SAP Key User
+    {
+      id: "sap-mm",
+      titleKey: "cardSapMM",
+      descKey: "descSapMM",
+      Icon: Package,
+      accentColor: "#eeff00",
+      totalNodes: 7,
+      doneNodes: 0,
+    },
+    {
+      id: "sap-sd",
+      titleKey: "cardSapSD",
+      descKey: "descSapSD",
+      Icon: ShoppingCart,
+      accentColor: "#eeff00",
+      totalNodes: 7,
+      doneNodes: 0,
+    },
+    {
+      id: "sap-fi",
+      titleKey: "cardSapFI",
+      descKey: "descSapFI",
+      Icon: DollarSign,
+      accentColor: "#eeff00",
+      totalNodes: 7,
+      doneNodes: 0,
+    },
+    // SAP Consultant
+    {
+      id: "sap-consultant-mm",
+      titleKey: "cardSapConsultantMM",
+      descKey: "descSapConsultantMM",
+      Icon: Briefcase,
+      accentColor: "#00bfff",
+      totalNodes: 9,
+      doneNodes: 0,
+    },
+    {
+      id: "sap-consultant-sd",
+      titleKey: "cardSapConsultantSD",
+      descKey: "descSapConsultantSD",
+      Icon: Layers,
+      accentColor: "#00bfff",
+      totalNodes: 9,
+      doneNodes: 0,
+    },
+    {
+      id: "sap-consultant-fi",
+      titleKey: "cardSapConsultantFI",
+      descKey: "descSapConsultantFI",
+      Icon: BarChart3,
+      accentColor: "#00bfff",
+      totalNodes: 9,
+      doneNodes: 0,
+    },
+    // Microsoft Power Platform
+    {
+      id: "power-apps",
+      titleKey: "cardPowerApps",
+      descKey: "descPowerApps",
+      Icon: Zap,
+      accentColor: "#00ff88",
+      totalNodes: 7,
+      doneNodes: 0,
+    },
+    {
+      id: "power-automate",
+      titleKey: "cardPowerAutomate",
+      descKey: "descPowerAutomate",
+      Icon: GitBranch,
+      accentColor: "#00ff88",
+      totalNodes: 7,
+      doneNodes: 0,
+    },
+    {
+      id: "power-bi",
+      titleKey: "cardPowerBI",
+      descKey: "descPowerBI",
+      Icon: BarChart3,
+      accentColor: "#00ff88",
+      totalNodes: 7,
+      doneNodes: 0,
+    },
+    // Demand & Service
+    {
+      id: "jira",
+      titleKey: "cardJira",
+      descKey: "descJira",
+      Icon: TicketCheck,
+      accentColor: "#ff6b6b",
+      totalNodes: 6,
+      doneNodes: 0,
+    },
+    {
+      id: "servicenow",
+      titleKey: "cardServiceNow",
+      descKey: "descServiceNow",
+      Icon: Settings,
+      accentColor: "#ff6b6b",
+      totalNodes: 6,
+      doneNodes: 0,
+    },
+    {
+      id: "sharepoint",
+      titleKey: "cardSharePoint",
+      descKey: "descSharePoint",
+      Icon: FileText,
+      accentColor: "#ff6b6b",
+      totalNodes: 6,
+      doneNodes: 0,
+    },
+  ]
+
+  // Calculate done nodes based on completed checklist
+  return cards.map((card) => {
+    const roadmap = roadmaps.find((r) => r.id === card.id)
+    if (!roadmap) return card
+
+    // Count nodes that have at least one checklist item completed
+    let doneCount = 0
+    for (const node of roadmap.nodes) {
+      const completedItems = completedChecklist[node.id]?.length || 0
+      if (completedItems > 0) {
+        doneCount++
+      }
+    }
+
+    return {
+      ...card,
+      doneNodes: doneCount,
+    }
+  })
+}
 
 type CategoryId = "sap-key" | "sap-consultant" | "microsoft" | "demand"
 
-const categories: { id: CategoryId; titleKey: keyof Translations; ids: string[] }[] = [
+const categories: {
+  id: CategoryId
+  titleKey: keyof Translations
+  ids: string[]
+}[] = [
   {
     id: "sap-key",
     titleKey: "catSapKeyUser",
@@ -77,15 +204,22 @@ const categories: { id: CategoryId; titleKey: keyof Translations; ids: string[] 
 ]
 
 const categoryColors: Record<CategoryId, string> = {
-  "sap-key":        "#eeff00",
+  "sap-key": "#eeff00",
   "sap-consultant": "#00bfff",
-  "microsoft":      "#00ff88",
-  "demand":         "#ff6b6b",
+  microsoft: "#00ff88",
+  demand: "#ff6b6b",
 }
 
 export default function Home() {
   const { t } = useLang()
   const [searchQuery, setSearchQuery] = useState("")
+  const { completedChecklist, isLoading } = useProgress()
+
+  // Build card definitions with real progress data
+  const cardDefs = useMemo(
+    () => buildCardDefs(completedChecklist),
+    [completedChecklist],
+  )
 
   const filteredCards = useMemo(() => {
     if (!searchQuery.trim()) return cardDefs
@@ -95,7 +229,7 @@ export default function Home() {
       const desc = (t[c.descKey] as string).toLowerCase()
       return title.includes(q) || desc.includes(q)
     })
-  }, [searchQuery, t])
+  }, [searchQuery, t, cardDefs])
 
   return (
     <>
@@ -105,7 +239,9 @@ export default function Home() {
         <section className="mb-12 text-center">
           <div className="inline-flex items-center gap-2 rounded-sm border border-primary/30 bg-primary/5 px-3 py-1 mb-4">
             <Terminal className="h-3.5 w-3.5 text-primary" aria-hidden />
-            <span className="font-mono text-xs text-primary">Enterprise Technology Ecosystem</span>
+            <span className="font-mono text-xs text-primary">
+              Enterprise Technology Ecosystem
+            </span>
           </div>
           <h1 className="font-mono text-3xl font-bold text-foreground text-balance mb-3 md:text-4xl">
             {t.homeTitle}
@@ -119,15 +255,20 @@ export default function Home() {
         <div className="mb-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {[
             { label: "Roadmaps", value: "12" },
-            { label: t.nodes,    value: "84" },
-            { label: t.catSapKeyUser.split(" ").slice(-2).join(" "), value: "SAP" },
+            { label: t.nodes, value: "84" },
+            {
+              label: t.catSapKeyUser.split(" ").slice(-2).join(" "),
+              value: "SAP",
+            },
             { label: "Power Platform", value: "MS" },
           ].map((stat, i) => (
             <div
               key={i}
               className="rounded-sm border border-border bg-card p-3 text-center"
             >
-              <p className="font-mono text-2xl font-bold text-primary">{stat.value}</p>
+              <p className="font-mono text-2xl font-bold text-primary">
+                {stat.value}
+              </p>
               <p className="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
                 {stat.label}
               </p>
@@ -140,14 +281,12 @@ export default function Home() {
           /* Search results flat view */
           <div>
             <p className="mb-4 font-mono text-xs text-muted-foreground">
-              {filteredCards.length} resultado{filteredCards.length !== 1 ? "s" : ""}
+              {filteredCards.length} resultado
+              {filteredCards.length !== 1 ? "s" : ""}
             </p>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {filteredCards.map((card) => (
-                <RoadmapCard
-                  key={card.id}
-                  {...card}
-                />
+                <RoadmapCard key={card.id} {...card} />
               ))}
             </div>
           </div>
@@ -174,10 +313,7 @@ export default function Home() {
                   </div>
                   <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     {cards.map((card) => (
-                      <RoadmapCard
-                        key={card.id}
-                        {...card}
-                      />
+                      <RoadmapCard key={card.id} {...card} />
                     ))}
                   </div>
                 </section>

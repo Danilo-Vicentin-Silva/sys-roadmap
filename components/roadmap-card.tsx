@@ -16,6 +16,18 @@ interface RoadmapCardProps {
   doneNodes?: number
 }
 
+/**
+ * Get dynamic color based on progress percentage
+ * - 100%: completed (neon green)
+ * - 1-99%: in progress (orange/warm)
+ * - 0%: not started (default accent)
+ */
+function getProgressColor(pct: number, defaultColor: string): string {
+  if (pct === 100) return "var(--neon-green)" // Completed
+  if (pct > 0) return "var(--neon-yellow)" // In progress
+  return defaultColor // Not started
+}
+
 export function RoadmapCard({
   id,
   titleKey,
@@ -30,6 +42,7 @@ export function RoadmapCard({
   const title = t[titleKey] as string
   const desc = t[descKey] as string
   const pct = Math.round((doneNodes / totalNodes) * 100)
+  const progressColor = getProgressColor(pct, accentColor)
 
   return (
     <Link
@@ -38,8 +51,8 @@ export function RoadmapCard({
     >
       <div className="flex items-start gap-4 p-4">
         <div
-          className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border-2"
-          style={{ borderColor: accentColor, color: accentColor }}
+          className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border-2 transition-colors"
+          style={{ borderColor: progressColor, color: progressColor }}
         >
           <Icon className="h-4 w-4" aria-hidden />
         </div>
@@ -47,7 +60,9 @@ export function RoadmapCard({
           <p className="truncate font-mono text-sm font-bold text-foreground group-hover:text-primary transition-colors">
             {title}
           </p>
-          <p className="mt-0.5 text-xs text-muted-foreground leading-relaxed line-clamp-2">{desc}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground leading-relaxed line-clamp-2">
+            {desc}
+          </p>
         </div>
         <svg
           className="mt-1 h-4 w-4 shrink-0 text-muted-foreground group-hover:text-primary transition-colors"
@@ -74,7 +89,7 @@ export function RoadmapCard({
         <div className="h-1 w-full rounded-full bg-secondary overflow-hidden">
           <div
             className="h-full rounded-full transition-all duration-500"
-            style={{ width: `${pct}%`, backgroundColor: accentColor }}
+            style={{ width: `${pct}%`, backgroundColor: progressColor }}
           />
         </div>
       </div>
