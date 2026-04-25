@@ -33,6 +33,7 @@ export const translations = {
     cardJira: "Jira",
     cardServiceNow: "ServiceNow",
     cardSharePoint: "SharePoint Workflows",
+    cardDemand: "Demand & Service Mgmt", // Added for the Demand roadmap
 
     // Card descriptions
     descSapMM: "Materials Management — procurement, inventory & valuation",
@@ -47,6 +48,7 @@ export const translations = {
     descJira: "Agile project tracking, sprints & backlog management",
     descServiceNow: "ITSM, incident & change management workflows",
     descSharePoint: "Intranet, document libraries & Power Automate integration",
+    descDemand: "Custom workflows, SharePoint lists, and service architecture.", // Added for Demand roadmap
 
     // Roadmap view
     backToHome: "Back to Roadmaps",
@@ -80,6 +82,12 @@ export const translations = {
     nodePA5: "Connectors & Integration",
     nodePA6: "ALM & Deployment",
     nodePA7: "Governance & Security",
+
+    // Demand Mgmt nodes (Added)
+    nodeDM1: "Requirement Gathering",
+    nodeDM2: "Database & Schema Modeling",
+    nodeDM3: "Workflow Automation",
+    nodeDM4: "SLA Tracking",
 
     // Node details — MM Procure-to-Pay
     detailP2PTitle: "Procure-to-Pay",
@@ -124,6 +132,18 @@ export const translations = {
       "Understand integration with FI and SD",
     ],
 
+    // Node details — Demand Mgmt (Added)
+    detailSchemaTitle: "Advanced Schema Modeling",
+    detailSchemaTheory:
+      "Designing the backend for service requests. Avoid generic 'status' columns; favor specific temporal controls for recurring demands to ensure accurate reporting and tracking.",
+    detailSchemaTechnical:
+      "SharePoint Lists / Dataverse. Use 'Periodicity' columns (Daily, Weekly, Monthly) instead of flat statuses for recurring tasks.",
+    detailSchemaChecklist: [
+      "Map data types effectively",
+      "Create a Periodicity column",
+      "Configure indexing for large lists",
+    ],
+
     progress: "Progress",
     nodes: "nodes",
     completed: "completed",
@@ -163,6 +183,7 @@ export const translations = {
     cardJira: "Jira",
     cardServiceNow: "ServiceNow",
     cardSharePoint: "Fluxos SharePoint",
+    cardDemand: "Gestão de Demandas", // Added
 
     // Card descriptions
     descSapMM: "Gestão de Materiais — compras, estoque e avaliação",
@@ -178,6 +199,8 @@ export const translations = {
     descServiceNow: "ITSM, incidentes e fluxos de gestão de mudanças",
     descSharePoint:
       "Intranet, bibliotecas de documentos e integração Power Automate",
+    descDemand:
+      "Fluxos de trabalho customizados, listas SharePoint e arquitetura de serviços.", // Added
 
     // Roadmap view
     backToHome: "Voltar aos Roadmaps",
@@ -211,6 +234,12 @@ export const translations = {
     nodePA5: "Conectores e Integração",
     nodePA6: "ALM e Implantação",
     nodePA7: "Governança e Segurança",
+
+    // Demand Mgmt nodes (Added)
+    nodeDM1: "Levantamento de Requisitos",
+    nodeDM2: "Modelagem de Dados e Schemas",
+    nodeDM3: "Automação de Workflows",
+    nodeDM4: "Rastreamento de SLAs",
 
     // Node details — MM Procure-to-Pay
     detailP2PTitle: "Procure-to-Pay",
@@ -253,6 +282,18 @@ export const translations = {
       "Navegar pelo menu SAP Easy Access",
       "Identificar as principais transações MM",
       "Entender a integração com FI e SD",
+    ],
+
+    // Node details — Demand Mgmt (Added)
+    detailSchemaTitle: "Modelagem Avançada de Schemas",
+    detailSchemaTheory:
+      "Desenhando o backend para solicitações de serviço. Evite colunas genéricas de 'status'; prefira controles temporais específicos para demandas recorrentes para garantir relatórios precisos.",
+    detailSchemaTechnical:
+      "Listas SharePoint / Dataverse. Utilize colunas de 'Periodicidade' (Diário, Semanal, Mensal) em vez de status planos para tarefas recorrentes.",
+    detailSchemaChecklist: [
+      "Mapear tipos de dados de forma eficaz",
+      "Criar coluna de Periodicidade",
+      "Configurar indexação para listas grandes",
     ],
 
     progress: "Progresso",
