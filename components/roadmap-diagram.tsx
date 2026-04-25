@@ -4,7 +4,7 @@ import { useState, useCallback, useRef, useEffect } from "react"
 import { useLang } from "@/lib/lang-context"
 import { NodePanel } from "@/components/node-panel"
 import type { RoadmapData, RoadmapNode } from "@/lib/roadmap-data"
-import { getNodeLabel } from "@/lib/roadmap-data"
+import { getNodeLabel, nodeDetails } from "@/lib/roadmap-data"
 import { useProgress } from "@/hooks/use-progress"
 import { translations } from "@/lib/i18n"
 
@@ -24,23 +24,26 @@ function getStatusColors(
   const border = cssVars["--border"] || "#444444"
   const fg = cssVars["--foreground"] || "#ededed"
 
-  // If user has marked items as completed, show user progress color
-  if (checklistProgress > 0) {
-    if (checklistProgress === 100) {
-      return {
-        fill: green,
-        stroke: green,
-        text: cssVars["--primary-foreground"] || "#0a0a0a",
-      }
-    }
+  // User progress takes priority over original status
+  // Legend: Yellow = Completed, Green = In Progress, Grey = To Do
+  if (checklistProgress === 100) {
+    // 100% completed = Yellow (Completed)
     return {
       fill: yellow,
       stroke: yellow,
       text: cssVars["--primary-foreground"] || "#0a0a0a",
     }
   }
+  if (checklistProgress > 0) {
+    // 1-99% completed = Green (In Progress)
+    return {
+      fill: green,
+      stroke: green,
+      text: cssVars["--primary-foreground"] || "#0a0a0a",
+    }
+  }
 
-  // Fall back to original status colors
+  // No user progress - fall back to original status colors
   if (status === "done")
     return {
       fill: yellow,
@@ -185,29 +188,55 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
             const to = nodeMap[edge.to]
             if (!from || !to) return null
 
-            const stroke =
-              from.status === "done"
-                ? yellow
-                : from.status === "in-progress"
-                  ? green
-                  : cssVars["--border"] || "#333333"
-            const markerId =
-              from.status === "done"
-                ? "arrow-yellow"
-                : from.status === "in-progress"
-                  ? "arrow-green"
-                  : "arrow-grey"
+            // Calculate user progress for the source node using nodeDetails
+            const fromDetail = nodeDetails[from.detailKey]
+            const fromChecklistItems = fromDetail
+              ? (translations[lang][
+                  fromDetail.checklistKey
+                ] as unknown as string[])
+              : []
+            const fromTotalItems = Array.isArray(fromChecklistItems)
+              ? fromChecklistItems.length
+              : 0
+            const fromProgress =
+              fromTotalItems > 0
+                ? Math.round(
+                    (completedChecklist[from.id]?.length || 0) / fromTotalItems,
+                  ) * 100
+                : 0
+
+            // Use user progress for edge color (matching legend: Yellow=Completed, Green=In Progress)
+            let stroke: string
+            let markerId: string
+            let dashArray: string | undefined
+            let opacity = 1
+
+            if (fromProgress === 100) {
+              // Completed = Yellow
+              stroke = yellow
+              markerId = "arrow-yellow"
+            } else if (fromProgress > 0) {
+              // In Progress = Green
+              stroke = green
+              markerId = "arrow-green"
+            } else {
+              // To Do = Grey
+              stroke = cssVars["--border"] || "#333333"
+              markerId = "arrow-grey"
+              dashArray = "6 4"
+              opacity = 0.4
+            }
 
             return (
               <path
                 key={i}
                 d={buildPath(from, to)}
                 stroke={stroke}
-                strokeWidth={from.status === "done" ? 2.5 : 2}
-                strokeDasharray={from.status === "todo" ? "6 4" : undefined}
+                strokeWidth={fromProgress === 100 ? 2.5 : 2}
+                strokeDasharray={dashArray}
                 fill="none"
                 markerEnd={`url(#${markerId})`}
-                opacity={from.status === "todo" ? 0.4 : 1}
+                opacity={opacity}
               />
             )
           })}
@@ -216,16 +245,17 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
           {roadmap.nodes.map((node) => {
             const label = getNodeLabel(node, lang)
 
-            // Calculate user progress based on checklist items
-            const nodeChecklist = completedChecklist[node.id] || []
-            const detailKey = node.detailKey
-            const checklistItems = translations[lang][
-              detailKey + "Checklist"
-            ] as unknown as string[]
+            // Calculate user progress based on checklist items using nodeDetails
+            const nodeDetail = nodeDetails[node.detailKey]
+            const checklistItems = nodeDetail
+              ? (translations[lang][
+                  nodeDetail.checklistKey
+                ] as unknown as string[])
+              : []
             const totalItems = Array.isArray(checklistItems)
               ? checklistItems.length
               : 0
-            const completedItems = nodeChecklist.length
+            const completedItems = completedChecklist[node.id]?.length || 0
             const checklistProgress =
               totalItems > 0
                 ? Math.round((completedItems / totalItems) * 100)
@@ -320,7 +350,7 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
                   </text>
                 ))}
 
-                {node.status === "in-progress" && (
+                {node.status === "in-progress" && checklistProgress === 0 && (
                   <circle
                     cx={node.x + node.width - 10}
                     cy={node.y + 10}
@@ -331,14 +361,14 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
                   />
                 )}
 
-                {/* User-completed indicator from localStorage - node is fully completed */}
-                {!isLoading && checklistProgress === 100 && (
+                {/* User progress indicator - matches legend: Yellow=Completed, Green=In Progress */}
+                {!isLoading && checklistProgress > 0 && (
                   <circle
                     cx={node.x + node.width - 10}
                     cy={node.y + 10}
                     r={4}
-                    fill={green}
-                    stroke={green}
+                    fill={checklistProgress === 100 ? yellow : green}
+                    stroke={checklistProgress === 100 ? yellow : green}
                     strokeWidth={1.5}
                     opacity={0.8}
                   />

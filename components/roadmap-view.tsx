@@ -3,6 +3,9 @@
 import { ArrowLeft, Circle } from "lucide-react"
 import { useLang } from "@/lib/lang-context"
 import { RoadmapDiagram } from "@/components/roadmap-diagram"
+import { useProgress } from "@/hooks/use-progress"
+import { nodeDetails } from "@/lib/roadmap-data"
+import { translations } from "@/lib/i18n"
 import type { RoadmapData } from "@/lib/roadmap-data"
 
 interface RoadmapViewProps {
@@ -11,13 +14,43 @@ interface RoadmapViewProps {
 }
 
 export function RoadmapView({ roadmap, onBack }: RoadmapViewProps) {
-  const { t } = useLang()
+  const { t, lang } = useLang()
+  const { completedChecklist, isLoading } = useProgress()
 
   const title = t[roadmap.titleKey] as string
   const totalNodes = roadmap.nodes.length
-  const doneNodes = roadmap.nodes.filter((n) => n.status === "done").length
-  const inProgressNodes = roadmap.nodes.filter((n) => n.status === "in-progress").length
-  const pct = Math.round((doneNodes / totalNodes) * 100)
+
+  // Calculate done nodes based on user progress (checklist completion)
+  let doneNodes = 0
+  let inProgressNodes = 0
+
+  for (const node of roadmap.nodes) {
+    const nodeChecklist = completedChecklist[node.id] || []
+    const completedItems = nodeChecklist.length
+
+    // Get the checklist items from translations using detailKey
+    const detail = nodeDetails[node.detailKey]
+    if (detail) {
+      const checklistKey = detail.checklistKey
+      const checklistItems = translations[lang][
+        checklistKey
+      ] as unknown as string[]
+      const totalItems = Array.isArray(checklistItems)
+        ? checklistItems.length
+        : 0
+
+      if (totalItems > 0) {
+        const progress = (completedItems / totalItems) * 100
+        if (progress === 100) {
+          doneNodes++
+        } else if (progress > 0) {
+          inProgressNodes++
+        }
+      }
+    }
+  }
+
+  const pct = totalNodes > 0 ? Math.round((doneNodes / totalNodes) * 100) : 0
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-3.5rem)]">
@@ -37,23 +70,40 @@ export function RoadmapView({ roadmap, onBack }: RoadmapViewProps) {
               <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-1">
                 {t.roadmapTitle}
               </p>
-              <h1 className="font-mono text-2xl font-bold text-foreground">{title}</h1>
+              <h1 className="font-mono text-2xl font-bold text-foreground">
+                {title}
+              </h1>
             </div>
 
             {/* Legend & progress */}
             <div className="flex flex-col items-end gap-2">
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-1.5">
-                  <Circle className="h-3 w-3 fill-neon-yellow text-neon-yellow" aria-hidden />
-                  <span className="font-mono text-[10px] text-muted-foreground">{t.nodeCompleted}</span>
+                  <Circle
+                    className="h-3 w-3 fill-neon-yellow text-neon-yellow"
+                    aria-hidden
+                  />
+                  <span className="font-mono text-[10px] text-muted-foreground">
+                    {t.nodeCompleted}
+                  </span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Circle className="h-3 w-3 fill-neon-green text-neon-green" aria-hidden />
-                  <span className="font-mono text-[10px] text-muted-foreground">{t.nodeInProgress}</span>
+                  <Circle
+                    className="h-3 w-3 fill-neon-green text-neon-green"
+                    aria-hidden
+                  />
+                  <span className="font-mono text-[10px] text-muted-foreground">
+                    {t.nodeInProgress}
+                  </span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Circle className="h-3 w-3 fill-muted stroke-border" aria-hidden />
-                  <span className="font-mono text-[10px] text-muted-foreground">{t.nodeTodo}</span>
+                  <Circle
+                    className="h-3 w-3 fill-muted stroke-border"
+                    aria-hidden
+                  />
+                  <span className="font-mono text-[10px] text-muted-foreground">
+                    {t.nodeTodo}
+                  </span>
                 </div>
               </div>
               <div className="flex items-center gap-3">
