@@ -1,0 +1,144 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Light theme (default) */
+:root {
+  --background: #f5f5f5;
+  --foreground: #1a1a1a;
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a1a;
+  --primary: #b8cc00;
+  --primary-foreground: #1a1a1a;
+  --secondary: #e8e8e8;
+  --secondary-foreground: #1a1a1a;
+  --muted: #e0e0e0;
+  --muted-foreground: #666666;
+  --accent: #b8cc00;
+  --accent-foreground: #1a1a1a;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #d4d4d4;
+  --input: #e8e8e8;
+  --ring: #b8cc00;
+  --radius: 0.25rem;
+
+  /* brand */
+  --neon-yellow: #b8cc00;
+  --neon-green: #00cc6a;
+  --neon-blue: #0099cc;
+  --dark-surface: #ffffff;
+  --darker-surface: #f5f5f5;
+}
+
+/* Dark theme */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --card: #111111;
+  --card-foreground: #ededed;
+  --popover: #111111;
+  --popover-foreground: #ededed;
+  --primary: #eeff00;
+  --primary-foreground: #0a0a0a;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #ededed;
+  --muted: #1a1a1a;
+  --muted-foreground: #888888;
+  --accent: #eeff00;
+  --accent-foreground: #0a0a0a;
+  --destructive: #ff3333;
+  --destructive-foreground: #ffffff;
+  --border: #2a2a2a;
+  --input: #1a1a1a;
+  --ring: #eeff00;
+
+  /* brand */
+  --neon-yellow: #eeff00;
+  --neon-green: #00ff88;
+  --neon-blue: #00bfff;
+  --dark-surface: #111111;
+  --darker-surface: #0a0a0a;
+}
+
+@theme inline {
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-neon-yellow: var(--neon-yellow);
+  --color-neon-green: var(--neon-green);
+  --color-neon-blue: var(--neon-blue);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 8px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--background);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+  }
+}
+
+/* Roadmap diagram styles */
+.roadmap-node {
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.roadmap-node:hover rect {
+  filter: brightness(1.15);
+}
+.roadmap-node text {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+/* Neo-brutalist card hover */
+.neo-card {
+  border: 2px solid var(--border);
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+.neo-card:hover {
+  border-color: var(--neon-yellow);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0px var(--neon-yellow);
+}
