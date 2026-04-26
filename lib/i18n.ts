@@ -70,14 +70,18 @@ export const translations = {
     panelClose: "Close",
 
     // SAP MM nodes
-    nodeMM1: "Introduction to SAP MM",
-    nodeMM2: "Organizational Structure",
-    nodeMM3: "Master Data",
-    nodeMM4: "Procure-to-Pay",
-    nodeMM5: "Inventory Management",
-    nodeMM6: "Invoice Verification",
-    nodeMM7: "Reporting & Analytics",
-    nodeMM8: "Governance, KPIs & Continuous Improvement",
+    nodeMM1: "Navigation & Organizational Structure",
+    nodeMM2: "Material and Vendor Master Data",
+    nodeMM3: "Purchasing Master Data (Pricing & Sourcing)",
+    nodeMM4: "Purchase Requisition Management",
+    nodeMM5: "Purchase Orders & Pricing Determination",
+    nodeMM6: "Release Strategy & Approvals",
+    nodeMM7: "Goods Receipt & Inventory (MIGO)",
+    nodeMM8: "Invoice Verification & 3-Way Match (MIRO)",
+    nodeMM9: "Outline Agreements (Contracts & Schedules)",
+    nodeMM10: "Subcontracting & Consignment",
+    nodeMM11: "MRP and Supply Planning",
+    nodeMM12: "Data Extraction & Key User Automation",
 
     // Power Apps nodes
     nodePA1: "Power Platform Fundamentals",
@@ -251,6 +255,136 @@ export const translations = {
       "Navigate SAP Easy Access menu",
       "Identify key MM transactions",
       "Understand integration with FI and SD",
+    ],
+
+    // SAP MM Key User — Complete Journey (12 phases)
+    detailMMOrgStructureTitle: "Navigation and Organizational Structure",
+    detailMMOrgStructureTheory:
+      "SAP is hierarchical. Understanding how your company is mapped (Company Code > Plant > Storage Location > Purchasing Organization) is critical because master data and purchasing documents inherit this structure.",
+    detailMMOrgStructureTechnical:
+      "Transaction: EC01 (Display). Key tables: T001W (Plants), T024 (Purchasing Groups).",
+    detailMMOrgStructureChecklist: [
+      "Map your current company structure in SAP",
+      "Differentiate centralized vs. decentralized purchasing organizations",
+      "Identify purchasing groups (buyers) in your area",
+    ],
+
+    detailMMMasterDataTitle: "Material and Vendor Master Data",
+    detailMMMasterDataTheory:
+      "Master data quality is the root cause of most support incidents. A material missing accounting views cannot be purchased; a vendor missing purchasing views cannot receive PO documents.",
+    detailMMMasterDataTechnical:
+      "Transactions: BP or XK01 (Vendors), MM01/MM02/MM03 (Materials). Tables: MARA, MARC, MBEW, LFA1, LFM1.",
+    detailMMMasterDataChecklist: [
+      "Create and extend a material for Purchasing and MRP views",
+      "Create a complete Business Partner for a vendor",
+      "Differentiate material type (FERT, ROH, HAWA) vs. material group",
+    ],
+
+    detailMMPurchasingMasterTitle: "Purchasing Master Data (Pricing and Sourcing)",
+    detailMMPurchasingMasterTheory:
+      "This is where SAP learns automation. Info Records connect material and vendor with negotiated prices, while Source Lists define approved suppliers by period.",
+    detailMMPurchasingMasterTechnical:
+      "Transactions: ME11/ME12 (Info Record), ME01 (Source List). Tables: EINA, EINE, EORD.",
+    detailMMPurchasingMasterChecklist: [
+      "Create an Info Record with price and freight conditions",
+      "Configure a Source List with one vendor marked as fixed",
+      "Simulate a vendor block for a specific material",
+    ],
+
+    detailMMPurchaseReqTitle: "Purchase Requisition Management",
+    detailMMPurchaseReqTheory:
+      "Purchase Requisition is the process trigger. It can be manual (business request) or automatic (MRP-generated). A Key User must monitor backlog and prioritization.",
+    detailMMPurchaseReqTechnical:
+      "Transactions: ME51N/ME52N/ME53N, ME5A. Main table: EBAN.",
+    detailMMPurchaseReqChecklist: [
+      "Create a manual PR assigned to a Cost Center (Account Assignment K)",
+      "Track open PRs through ME5A",
+    ],
+
+    detailMMPurchaseOrderTitle: "Purchase Orders and Pricing Determination",
+    detailMMPurchaseOrderTheory:
+      "A PO is the legal contract with suppliers. Key Users must master item categories and understand how SAP derives taxes, discounts, and gross/net values through pricing schemas.",
+    detailMMPurchaseOrderTechnical:
+      "Transactions: ME21N/ME22N/ME23N, ME2M. Tables: EKKO, EKPO, KONV.",
+    detailMMPurchaseOrderChecklist: [
+      "Convert a PR into a PO using Info Record data",
+      "Create a service PO (Item Category D)",
+      "Validate conditions tab for net vs. gross amounts",
+    ],
+
+    detailMMReleaseStrategyTitle: "Release Strategy and Approval Workflows",
+    detailMMReleaseStrategyTheory:
+      "Release strategies enforce purchasing governance. Orders above thresholds or specific account assignments require managerial approval before supplier communication.",
+    detailMMReleaseStrategyTechnical:
+      "Transactions: ME28, ME29N. Tables: T16FS, T16FC.",
+    detailMMReleaseStrategyChecklist: [
+      "Understand classes/characteristics triggering release strategy",
+      "Approve a PO in ME29N",
+      "Identify why a PO did not trigger release strategy",
+    ],
+
+    detailMMInventoryMigoTitle: "Goods Receipt and Inventory Management (MIGO)",
+    detailMMInventoryMigoTheory:
+      "At goods receipt, movement types drive stock and finance postings. Understanding 101, 102, and 122 is essential for operational and accounting integrity.",
+    detailMMInventoryMigoTechnical:
+      "Transactions: MIGO, MMBE. Tables: MKPF, MSEG. Movement types: 101, 102, 122.",
+    detailMMInventoryMigoChecklist: [
+      "Post goods receipt (101) referencing a PO",
+      "Execute a return to vendor",
+      "Check real-time stock in MMBE",
+    ],
+
+    detailMMInvoiceMiroTitle: "Invoice Verification and Three-Way Match (MIRO)",
+    detailMMInvoiceMiroTheory:
+      "This is the MM-FI boundary. SAP validates PO = GR = Invoice. Price/quantity mismatches create blocked invoices until resolved.",
+    detailMMInvoiceMiroTechnical:
+      "Transactions: MIRO, MIR4, MRBR. Tables: RBKP, RSEG.",
+    detailMMInvoiceMiroChecklist: [
+      "Post an invoice referencing goods receipt",
+      "Simulate a price variance block",
+      "Release blocked invoices through MRBR",
+    ],
+
+    detailMMOutlineAgreementsTitle:
+      "Outline Agreements (Contracts and Scheduling Agreements)",
+    detailMMOutlineAgreementsTheory:
+      "Outline agreements support strategic and long-term procurement. Contracts define value/quantity, while scheduling agreements automate recurring deliveries.",
+    detailMMOutlineAgreementsTechnical:
+      "Transactions: ME31K, ME31L, ME38. Table family: EKKO/EKPO with document types such as WK/MK.",
+    detailMMOutlineAgreementsChecklist: [
+      "Create a value contract (WK)",
+      "Create release orders consuming contract balance",
+    ],
+
+    detailMMSubcontractingConsignmentTitle: "Subcontracting and Consignment",
+    detailMMSubcontractingConsignmentTheory:
+      "Subcontracting sends components to a vendor for assembly. Consignment keeps supplier-owned stock at your site and payment happens only at consumption.",
+    detailMMSubcontractingConsignmentTechnical:
+      "Transactions: ME2O, MRKO. Tables: MSLB (subcontracting stock), MKOL (consignment stock). Key movements: 541 and 201 K.",
+    detailMMSubcontractingConsignmentChecklist: [
+      "Create a subcontracting PO (item category L) and post 541",
+      "Consume consignment stock (201 K) and settle through MRKO",
+    ],
+
+    detailMMMrpTitle: "MRP and Supply Planning",
+    detailMMMrpTheory:
+      "MRP is the replenishment engine. It reads stock, demand, and lead times to generate purchase proposals, preventing production disruption.",
+    detailMMMrpTechnical:
+      "Transactions: MD01N, MD04. Tables: MDKP, MDTB.",
+    detailMMMrpChecklist: [
+      "Analyze a material profile in MD04",
+      "Differentiate reorder point vs. PD planning",
+    ],
+
+    detailMMDataAutomationTitle: "Data Extraction and Key User Automation",
+    detailMMDataAutomationTheory:
+      "Senior Key Users generate analytical value by joining relational MM data for BI and automation. This reduces dependence on custom reports.",
+    detailMMDataAutomationTechnical:
+      "Transactions: SE16N, SQVI. Typical joins: EKKO -> EKPO -> MSEG -> RSEG and MARA -> MARC.",
+    detailMMDataAutomationChecklist: [
+      "Extract open PO items using EKKO and EKPO in SE16N",
+      "Create a simple join between MARA and MARC in SQVI",
+      "Model an external dataset (Dataverse/SharePoint) from SAP logic",
     ],
 
     // Node details — Demand Mgmt (Added)
@@ -1115,14 +1249,18 @@ export const translations = {
     panelClose: "Fechar",
 
     // SAP MM nodes
-    nodeMM1: "Introdução ao SAP MM",
-    nodeMM2: "Estrutura Organizacional",
-    nodeMM3: "Dados Mestre",
-    nodeMM4: "Procure-to-Pay",
-    nodeMM5: "Gestão de Estoque",
-    nodeMM6: "Verificação de Faturas",
-    nodeMM7: "Relatórios e Análises",
-    nodeMM8: "Governança, KPIs e Melhoria Contínua",
+    nodeMM1: "Navegação e Estrutura Organizacional",
+    nodeMM2: "Dados Mestres de Materiais e Fornecedores",
+    nodeMM3: "Dados Mestres de Compras (Pricing e Sourcing)",
+    nodeMM4: "Gestão de Requisições de Compras",
+    nodeMM5: "Pedidos de Compras e Determinação de Preço",
+    nodeMM6: "Estratégias de Liberação e Aprovação",
+    nodeMM7: "Recebimento e Gestão de Estoque (MIGO)",
+    nodeMM8: "Verificação de Faturas e Three-Way Match (MIRO)",
+    nodeMM9: "Outline Agreements (Contratos e Programações)",
+    nodeMM10: "Subcontratação e Consignação",
+    nodeMM11: "MRP e Planejamento de Suprimentos",
+    nodeMM12: "Extração de Dados e Automação Key User",
 
     // Power Apps nodes
     nodePA1: "Fundamentos da Power Platform",
@@ -1296,6 +1434,137 @@ export const translations = {
       "Navegar pelo menu SAP Easy Access",
       "Identificar as principais transações MM",
       "Entender a integração com FI e SD",
+    ],
+
+    // SAP MM Key User — Jornada Completa (12 fases)
+    detailMMOrgStructureTitle: "Navegação e Estrutura Organizacional",
+    detailMMOrgStructureTheory:
+      "O SAP é hierárquico. Entender como a empresa está modelada (Empresa > Centro > Depósito > Organização de Compras) é essencial, pois dados mestres e documentos de compras herdam essa estrutura.",
+    detailMMOrgStructureTechnical:
+      "Transação: EC01 (Visualização). Tabelas-chave: T001W (Centros), T024 (Grupos de Compras).",
+    detailMMOrgStructureChecklist: [
+      "Mapear a estrutura atual da empresa no SAP",
+      "Diferenciar organização de compras centralizada e descentralizada",
+      "Identificar os grupos de compras da sua área",
+    ],
+
+    detailMMMasterDataTitle: "Dados Mestres de Materiais e Fornecedores",
+    detailMMMasterDataTheory:
+      "A qualidade dos dados mestres é a causa raiz de grande parte dos chamados. Material sem visão contábil não pode ser comprado; fornecedor sem visão de compras não recebe pedidos corretamente.",
+    detailMMMasterDataTechnical:
+      "Transações: BP ou XK01 (Fornecedores), MM01/MM02/MM03 (Materiais). Tabelas: MARA, MARC, MBEW, LFA1, LFM1.",
+    detailMMMasterDataChecklist: [
+      "Criar e estender material para visões de Compras e MRP",
+      "Cadastrar Business Partner completo para fornecedor",
+      "Diferenciar tipo de material (FERT, ROH, HAWA) e grupo de mercadorias",
+    ],
+
+    detailMMPurchasingMasterTitle:
+      "Dados Mestres de Compras (Pricing e Sourcing)",
+    detailMMPurchasingMasterTheory:
+      "Aqui o SAP aprende a automatizar. O Registro Info conecta material e fornecedor com preço negociado, enquanto a Source List determina fornecedor homologado por período.",
+    detailMMPurchasingMasterTechnical:
+      "Transações: ME11/ME12 (Registro Info), ME01 (Source List). Tabelas: EINA, EINE, EORD.",
+    detailMMPurchasingMasterChecklist: [
+      "Criar Registro Info com condições de preço e frete",
+      "Configurar Source List com fornecedor fixo",
+      "Simular bloqueio de fornecedor para material específico",
+    ],
+
+    detailMMPurchaseReqTitle: "Gestão de Requisições de Compras",
+    detailMMPurchaseReqTheory:
+      "A Requisição de Compras é o gatilho do processo. Pode ser manual (área requisitante) ou automática (MRP). O Key User precisa monitorar backlog e priorização.",
+    detailMMPurchaseReqTechnical:
+      "Transações: ME51N/ME52N/ME53N, ME5A. Tabela principal: EBAN.",
+    detailMMPurchaseReqChecklist: [
+      "Criar RC manual com centro de custo (Atribuição Contábil K)",
+      "Rastrear RCs abertas pela ME5A",
+    ],
+
+    detailMMPurchaseOrderTitle: "Pedidos de Compras e Determinação de Preço",
+    detailMMPurchaseOrderTheory:
+      "O pedido de compras é o contrato legal com o mercado. O Key User deve dominar categorias de item e entender como o SAP calcula impostos, descontos e valores líquido/bruto.",
+    detailMMPurchaseOrderTechnical:
+      "Transações: ME21N/ME22N/ME23N, ME2M. Tabelas: EKKO, EKPO, KONV.",
+    detailMMPurchaseOrderChecklist: [
+      "Converter RC em PO aproveitando dados do Registro Info",
+      "Criar pedido de serviço (Categoria D)",
+      "Validar aba de condições para valor líquido vs. bruto",
+    ],
+
+    detailMMReleaseStrategyTitle: "Estratégias de Liberação e Aprovação",
+    detailMMReleaseStrategyTheory:
+      "Estratégias de liberação sustentam governança de compras. Pedidos com certos valores ou critérios ficam bloqueados até aprovação de níveis responsáveis.",
+    detailMMReleaseStrategyTechnical:
+      "Transações: ME28, ME29N. Tabelas: T16FS, T16FC.",
+    detailMMReleaseStrategyChecklist: [
+      "Entender classes e características que disparam bloqueio",
+      "Aprovar pedido via ME29N",
+      "Diagnosticar por que um pedido não acionou a estratégia",
+    ],
+
+    detailMMInventoryMigoTitle: "Recebimento e Gestão de Estoque (MIGO)",
+    detailMMInventoryMigoTheory:
+      "No recebimento físico, tipos de movimento determinam impactos de estoque e financeiros. Dominar 101, 102 e 122 é essencial para operação e auditoria.",
+    detailMMInventoryMigoTechnical:
+      "Transações: MIGO, MMBE. Tabelas: MKPF, MSEG. Movimentos: 101, 102, 122.",
+    detailMMInventoryMigoChecklist: [
+      "Fazer entrada de mercadoria (101) com referência ao PO",
+      "Executar devolução ao fornecedor",
+      "Conferir estoque em tempo real via MMBE",
+    ],
+
+    detailMMInvoiceMiroTitle: "Verificação de Faturas e Three-Way Match (MIRO)",
+    detailMMInvoiceMiroTheory:
+      "Esta é a fronteira MM-FI. O SAP compara Pedido = Recebido = Faturado. Divergências de preço/quantidade geram bloqueio até análise e liberação.",
+    detailMMInvoiceMiroTechnical:
+      "Transações: MIRO, MIR4, MRBR. Tabelas: RBKP, RSEG.",
+    detailMMInvoiceMiroChecklist: [
+      "Lançar fatura com referência ao recebimento",
+      "Simular bloqueio por divergência de preço",
+      "Liberar fatura bloqueada via MRBR",
+    ],
+
+    detailMMOutlineAgreementsTitle:
+      "Outline Agreements (Contratos e Programações)",
+    detailMMOutlineAgreementsTheory:
+      "Outline agreements suportam compras estratégicas de longo prazo. Contratos fixam valor/quantidade e programações de remessa automatizam entregas recorrentes.",
+    detailMMOutlineAgreementsTechnical:
+      "Transações: ME31K, ME31L, ME38. Família de tabelas EKKO/EKPO com tipos como WK/MK.",
+    detailMMOutlineAgreementsChecklist: [
+      "Criar contrato de valor (WK)",
+      "Emitir pedidos de liberação consumindo saldo contratual",
+    ],
+
+    detailMMSubcontractingConsignmentTitle: "Subcontratação e Consignação",
+    detailMMSubcontractingConsignmentTheory:
+      "Na subcontratação, componentes são enviados a terceiros para montagem. Na consignação, o estoque fica fisicamente na empresa, mas a propriedade é do fornecedor até o consumo.",
+    detailMMSubcontractingConsignmentTechnical:
+      "Transações: ME2O, MRKO. Tabelas: MSLB (subcontratação), MKOL (consignado). Movimentos-chave: 541 e 201 K.",
+    detailMMSubcontractingConsignmentChecklist: [
+      "Criar PO de subcontratação (Categoria L) e executar movimento 541",
+      "Consumir consignado (201 K) e liquidar via MRKO",
+    ],
+
+    detailMMMrpTitle: "MRP e Planejamento de Suprimentos",
+    detailMMMrpTheory:
+      "O MRP é o motor de reposição. Ele lê demanda, estoque e lead time para gerar propostas de compra automaticamente e evitar ruptura de produção.",
+    detailMMMrpTechnical:
+      "Transações: MD01N, MD04. Tabelas: MDKP, MDTB.",
+    detailMMMrpChecklist: [
+      "Analisar perfil do material na MD04",
+      "Diferenciar ponto de reposição e planejamento PD",
+    ],
+
+    detailMMDataAutomationTitle: "Extração de Dados e Automação Key User",
+    detailMMDataAutomationTheory:
+      "No nível sênior, o diferencial é transformar dados transacionais em inteligência. O Key User cruza tabelas MM para relatórios e automações sem depender sempre de desenvolvimento técnico.",
+    detailMMDataAutomationTechnical:
+      "Transações: SE16N, SQVI. Joins típicos: EKKO -> EKPO -> MSEG -> RSEG e MARA -> MARC.",
+    detailMMDataAutomationChecklist: [
+      "Extrair itens de pedido pendentes via EKKO e EKPO no SE16N",
+      "Criar join simples entre MARA e MARC no SQVI",
+      "Modelar base externa (Dataverse/SharePoint) com lógica SAP",
     ],
 
     // Node details — Demand Mgmt (Added)

@@ -127,4 +127,4 @@ Este projeto está sob a licença MIT.
 
 ---
 
-Desenvolvido com ❤️ por Danilo Vicentin Silva
+Desenvolvido por Danilo Vicentin Silva
