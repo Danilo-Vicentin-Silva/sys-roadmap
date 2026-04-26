@@ -20,8 +20,8 @@ import { Header } from "@/components/header"
 import { RoadmapCard } from "@/components/roadmap-card"
 import { useLang } from "@/lib/lang-context"
 import { useProgress } from "@/hooks/use-progress"
-import { roadmaps } from "@/lib/roadmap-data"
-import type { Translations } from "@/lib/i18n"
+import { nodeDetails, roadmaps } from "@/lib/roadmap-data"
+import { translations, type Lang, type Translations } from "@/lib/i18n"
 import type { LucideIcon } from "lucide-react"
 
 interface CardDef {
@@ -32,11 +32,14 @@ interface CardDef {
   accentColor: string
   totalNodes: number
   doneNodes: number
+  inProgressNodes: number
+  progressPct: number
 }
 
 // Build card definitions with real progress data
 function buildCardDefs(
   completedChecklist: Record<string, string[]>,
+  lang: Lang,
 ): CardDef[] {
   const cards: CardDef[] = [
     // SAP Key User
@@ -48,6 +51,8 @@ function buildCardDefs(
       accentColor: "#eeff00",
       totalNodes: 7,
       doneNodes: 0,
+      inProgressNodes: 0,
+      progressPct: 0,
     },
     {
       id: "sap-sd",
@@ -57,6 +62,8 @@ function buildCardDefs(
       accentColor: "#eeff00",
       totalNodes: 7,
       doneNodes: 0,
+      inProgressNodes: 0,
+      progressPct: 0,
     },
     {
       id: "sap-fi",
@@ -66,6 +73,8 @@ function buildCardDefs(
       accentColor: "#eeff00",
       totalNodes: 7,
       doneNodes: 0,
+      inProgressNodes: 0,
+      progressPct: 0,
     },
     // SAP Consultant
     {
@@ -76,6 +85,8 @@ function buildCardDefs(
       accentColor: "#00bfff",
       totalNodes: 9,
       doneNodes: 0,
+      inProgressNodes: 0,
+      progressPct: 0,
     },
     {
       id: "sap-consultant-sd",
@@ -85,6 +96,8 @@ function buildCardDefs(
       accentColor: "#00bfff",
       totalNodes: 9,
       doneNodes: 0,
+      inProgressNodes: 0,
+      progressPct: 0,
     },
     {
       id: "sap-consultant-fi",
@@ -94,6 +107,8 @@ function buildCardDefs(
       accentColor: "#00bfff",
       totalNodes: 9,
       doneNodes: 0,
+      inProgressNodes: 0,
+      progressPct: 0,
     },
     // Microsoft Power Platform
     {
@@ -104,6 +119,8 @@ function buildCardDefs(
       accentColor: "#00ff88",
       totalNodes: 7,
       doneNodes: 0,
+      inProgressNodes: 0,
+      progressPct: 0,
     },
     {
       id: "power-automate",
@@ -113,6 +130,8 @@ function buildCardDefs(
       accentColor: "#00ff88",
       totalNodes: 7,
       doneNodes: 0,
+      inProgressNodes: 0,
+      progressPct: 0,
     },
     {
       id: "power-bi",
@@ -122,6 +141,8 @@ function buildCardDefs(
       accentColor: "#00ff88",
       totalNodes: 7,
       doneNodes: 0,
+      inProgressNodes: 0,
+      progressPct: 0,
     },
     // Demand & Service
     {
@@ -132,6 +153,8 @@ function buildCardDefs(
       accentColor: "#ff6b6b",
       totalNodes: 6,
       doneNodes: 0,
+      inProgressNodes: 0,
+      progressPct: 0,
     },
     {
       id: "servicenow",
@@ -141,6 +164,8 @@ function buildCardDefs(
       accentColor: "#ff6b6b",
       totalNodes: 6,
       doneNodes: 0,
+      inProgressNodes: 0,
+      progressPct: 0,
     },
     {
       id: "sharepoint",
@@ -150,26 +175,57 @@ function buildCardDefs(
       accentColor: "#ff6b6b",
       totalNodes: 6,
       doneNodes: 0,
+      inProgressNodes: 0,
+      progressPct: 0,
     },
   ]
 
-  // Calculate done nodes based on completed checklist
+  // Calculate node status and weighted progress based on checklist completion
   return cards.map((card) => {
     const roadmap = roadmaps.find((r) => r.id === card.id)
     if (!roadmap) return card
 
-    // Count nodes that have at least one checklist item completed
     let doneCount = 0
+    let inProgressCount = 0
+    let progressAccumulator = 0
+
     for (const node of roadmap.nodes) {
+      const detail = nodeDetails[node.detailKey]
+      const checklistItems = detail
+        ? (translations[lang][detail.checklistKey] as unknown as string[])
+        : []
+      const totalItems = Array.isArray(checklistItems) ? checklistItems.length : 0
       const completedItems = completedChecklist[node.id]?.length || 0
-      if (completedItems > 0) {
+
+      if (totalItems === 0) {
+        if (node.status === "done") {
+          doneCount++
+          progressAccumulator += 1
+        } else if (node.status === "in-progress") {
+          inProgressCount++
+          progressAccumulator += 0.5
+        }
+        continue
+      }
+
+      const nodeProgress = Math.min(1, completedItems / totalItems)
+      progressAccumulator += nodeProgress
+
+      if (nodeProgress === 1) {
         doneCount++
+      } else if (nodeProgress > 0) {
+        inProgressCount++
       }
     }
 
     return {
       ...card,
       doneNodes: doneCount,
+      inProgressNodes: inProgressCount,
+      progressPct:
+        roadmap.nodes.length > 0
+          ? Math.round((progressAccumulator / roadmap.nodes.length) * 100)
+          : 0,
     }
   })
 }
@@ -211,14 +267,14 @@ const categoryColors: Record<CategoryId, string> = {
 }
 
 export default function Home() {
-  const { t } = useLang()
+  const { t, lang } = useLang()
   const [searchQuery, setSearchQuery] = useState("")
-  const { completedChecklist, isLoading } = useProgress()
+  const { completedChecklist } = useProgress()
 
   // Build card definitions with real progress data
   const cardDefs = useMemo(
-    () => buildCardDefs(completedChecklist),
-    [completedChecklist],
+    () => buildCardDefs(completedChecklist, lang),
+    [completedChecklist, lang],
   )
 
   const filteredCards = useMemo(() => {

@@ -59,6 +59,22 @@ function getStatusColors(
   return { fill: bg, stroke: border, text: fg }
 }
 
+function getEffectiveStatus(
+  fallbackStatus: string,
+  totalItems: number,
+  checklistProgress: number,
+): "done" | "in-progress" | "todo" {
+  if (totalItems > 0) {
+    if (checklistProgress === 100) return "done"
+    if (checklistProgress > 0) return "in-progress"
+    return "todo"
+  }
+  if (fallbackStatus === "done" || fallbackStatus === "in-progress") {
+    return fallbackStatus
+  }
+  return "todo"
+}
+
 const CANVAS_W = 840
 const CANVAS_H = 660
 
@@ -202,8 +218,9 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
             const fromProgress =
               fromTotalItems > 0
                 ? Math.round(
-                    (completedChecklist[from.id]?.length || 0) / fromTotalItems,
-                  ) * 100
+                    ((completedChecklist[from.id]?.length || 0) / fromTotalItems) *
+                      100,
+                  )
                 : 0
 
             // Use user progress for edge color (matching legend: Yellow=Completed, Green=In Progress)
@@ -262,17 +279,22 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
               totalItems > 0
                 ? Math.round((completedItems / totalItems) * 100)
                 : 0
+            const effectiveStatus = getEffectiveStatus(
+              node.status,
+              totalItems,
+              checklistProgress,
+            )
 
             const {
               fill,
               stroke: baseStroke,
               text,
-            } = getStatusColors(node.status, cssVars, checklistProgress)
+            } = getStatusColors(effectiveStatus, cssVars, checklistProgress)
             const isHovered = hoveredId === node.id
             const stroke = isHovered
               ? cssVars["--foreground"] || "#ffffff"
               : baseStroke
-            const strokeW = node.status !== "todo" || isHovered ? 2.5 : 2
+            const strokeW = effectiveStatus !== "todo" || isHovered ? 2.5 : 2
 
             // Word-wrap into max 2 lines
             const words = label.split(" ")
@@ -309,7 +331,7 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
                 style={{ outline: "none" }}
               >
                 {/* Glow layer */}
-                {(node.status !== "todo" || isHovered) && (
+                {(effectiveStatus !== "todo" || isHovered) && (
                   <rect
                     x={node.x - 3}
                     y={node.y - 3}
@@ -341,7 +363,7 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
                     y={textY + li * lineH}
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    fill={isHovered && node.status === "todo" ? yellow : text}
+                    fill={isHovered && effectiveStatus === "todo" ? yellow : text}
                     style={{
                       fontFamily: "'Space Mono', monospace",
                       fontSize: "11px",
@@ -352,7 +374,7 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
                   </text>
                 ))}
 
-                {node.status === "in-progress" && checklistProgress === 0 && (
+                {effectiveStatus === "in-progress" && checklistProgress === 0 && (
                   <circle
                     cx={node.x + node.width - 10}
                     cy={node.y + 10}

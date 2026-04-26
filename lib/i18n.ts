@@ -12,7 +12,7 @@ export const translations = {
     homeTitle: "Enterprise Technology Ecosystems",
     homeSubtitle:
       "Structured learning paths for corporate technology adoption. Click any track to explore the full roadmap.",
-    communityNote: "Community-driven paths for enterprise professionals.",
+    communityNote: "website develop by Danilo Vicentin S",
 
     // Card categories
     catSapKeyUser: "SAP Key User Tracks",
@@ -1027,7 +1027,7 @@ export const translations = {
     homeSubtitle:
       "Trilhas de aprendizado estruturadas para adoção de tecnologia corporativa. Clique em qualquer trilha para explorar o roadmap completo.",
     communityNote:
-      "Trilhas orientadas pela comunidade para profissionais corporativos.",
+      "Site desenvolvido por Danilo Vicentin S.",
 
     // Card categories
     catSapKeyUser: "Trilhas SAP Key User",

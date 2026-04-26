@@ -14,6 +14,8 @@ interface RoadmapCardProps {
   accentColor?: string
   totalNodes?: number
   doneNodes?: number
+  inProgressNodes?: number
+  progressPct?: number
 }
 
 /**
@@ -22,9 +24,14 @@ interface RoadmapCardProps {
  * - 1-99%: in progress (orange/warm)
  * - 0%: not started (default accent)
  */
-function getProgressColor(pct: number, defaultColor: string): string {
-  if (pct === 100) return "var(--neon-green)" // Completed
-  if (pct > 0) return "var(--neon-yellow)" // In progress
+function getProgressColor(
+  doneNodes: number,
+  totalNodes: number,
+  inProgressNodes: number,
+  defaultColor: string,
+): string {
+  if (totalNodes > 0 && doneNodes === totalNodes) return "var(--neon-green)" // Completed
+  if (doneNodes > 0 || inProgressNodes > 0) return "var(--neon-yellow)" // In progress
   return defaultColor // Not started
 }
 
@@ -37,12 +44,19 @@ export function RoadmapCard({
   accentColor = "#eeff00",
   totalNodes = 7,
   doneNodes = 0,
+  inProgressNodes = 0,
+  progressPct = 0,
 }: RoadmapCardProps) {
   const { t } = useLang()
   const title = t[titleKey] as string
   const desc = t[descKey] as string
-  const pct = Math.round((doneNodes / totalNodes) * 100)
-  const progressColor = getProgressColor(pct, accentColor)
+  const pct = Math.max(0, Math.min(100, progressPct))
+  const progressColor = getProgressColor(
+    doneNodes,
+    totalNodes,
+    inProgressNodes,
+    accentColor,
+  )
 
   return (
     <Link

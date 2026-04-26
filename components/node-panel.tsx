@@ -25,6 +25,22 @@ const statusLabels: Record<string, keyof (typeof translations)["en"]> = {
   todo: "nodeTodo",
 }
 
+function getEffectiveStatus(
+  fallbackStatus: string,
+  totalItems: number,
+  completedCount: number,
+): "done" | "in-progress" | "todo" {
+  if (totalItems > 0) {
+    if (completedCount >= totalItems) return "done"
+    if (completedCount > 0) return "in-progress"
+    return "todo"
+  }
+  if (fallbackStatus === "done" || fallbackStatus === "in-progress") {
+    return fallbackStatus
+  }
+  return "todo"
+}
+
 export function NodePanel({ node, onClose }: NodePanelProps) {
   const { t, lang } = useLang()
   const {
@@ -46,11 +62,17 @@ export function NodePanel({ node, onClose }: NodePanelProps) {
   const checklist = translations[lang][
     detail.checklistKey
   ] as unknown as string[]
-  const statusColor = statusColors[node.status]
-  const statusLabel = t[statusLabels[node.status]] as string
   const isCompleted = completedNodes.includes(node.id)
   const nodeChecklist = completedChecklist[node.id] || []
   const completedCount = nodeChecklist.length
+  const totalItems = Array.isArray(checklist) ? checklist.length : 0
+  const effectiveStatus = getEffectiveStatus(
+    node.status,
+    totalItems,
+    completedCount,
+  )
+  const statusColor = statusColors[effectiveStatus]
+  const statusLabel = t[statusLabels[effectiveStatus]] as string
 
   return (
     <>
@@ -160,7 +182,7 @@ export function NodePanel({ node, onClose }: NodePanelProps) {
               </div>
               {completedCount > 0 && (
                 <span className="font-mono text-xs text-neon-green">
-                  {completedCount}/{checklist?.length || 0}
+                  {completedCount}/{totalItems}
                 </span>
               )}
             </div>
