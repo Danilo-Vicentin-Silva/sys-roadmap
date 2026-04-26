@@ -118,6 +118,7 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
     "--card",
     "--border",
     "--foreground",
+    "--muted-foreground",
     "--primary-foreground",
     "--background",
     "--secondary",
@@ -177,7 +178,7 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
             >
               <path
                 d="M0,0 L0,6 L8,3 z"
-                fill={cssVars["--border"] || "#444444"}
+                fill={cssVars["--muted-foreground"] || "#6b7280"}
               />
             </marker>
           </defs>
@@ -221,10 +222,10 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
               markerId = "arrow-green"
             } else {
               // To Do = Grey
-              stroke = cssVars["--border"] || "#333333"
+              stroke = cssVars["--muted-foreground"] || "#6b7280"
               markerId = "arrow-grey"
-              dashArray = "6 4"
-              opacity = 0.4
+              dashArray = "7 3"
+              opacity = 0.9
             }
 
             return (
@@ -232,8 +233,9 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
                 key={i}
                 d={buildPath(from, to)}
                 stroke={stroke}
-                strokeWidth={fromProgress === 100 ? 2.5 : 2}
+                strokeWidth={fromProgress === 100 ? 2.5 : fromProgress > 0 ? 2 : 2.25}
                 strokeDasharray={dashArray}
+                strokeLinecap={dashArray ? "round" : undefined}
                 fill="none"
                 markerEnd={`url(#${markerId})`}
                 opacity={opacity}
