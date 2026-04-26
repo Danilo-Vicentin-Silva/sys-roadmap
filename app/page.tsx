@@ -178,6 +178,17 @@ function buildCardDefs(
       inProgressNodes: 0,
       progressPct: 0,
     },
+    {
+      id: "journey-foundations",
+      titleKey: "cardJourneyFoundations",
+      descKey: "descJourneyFoundations",
+      Icon: Layers,
+      accentColor: "#8b5cf6",
+      totalNodes: 8,
+      doneNodes: 0,
+      inProgressNodes: 0,
+      progressPct: 0,
+    },
   ]
 
   // Calculate node status and weighted progress based on checklist completion
@@ -220,6 +231,7 @@ function buildCardDefs(
 
     return {
       ...card,
+      totalNodes: roadmap.nodes.length,
       doneNodes: doneCount,
       inProgressNodes: inProgressCount,
       progressPct:
@@ -230,7 +242,12 @@ function buildCardDefs(
   })
 }
 
-type CategoryId = "sap-key" | "sap-consultant" | "microsoft" | "demand"
+type CategoryId =
+  | "sap-key"
+  | "sap-consultant"
+  | "microsoft"
+  | "demand"
+  | "foundations"
 
 const categories: {
   id: CategoryId
@@ -257,6 +274,11 @@ const categories: {
     titleKey: "catDemand",
     ids: ["jira", "servicenow", "sharepoint"],
   },
+  {
+    id: "foundations",
+    titleKey: "catFoundations",
+    ids: ["journey-foundations"],
+  },
 ]
 
 const categoryColors: Record<CategoryId, string> = {
@@ -264,6 +286,7 @@ const categoryColors: Record<CategoryId, string> = {
   "sap-consultant": "#00bfff",
   microsoft: "#00ff88",
   demand: "#ff6b6b",
+  foundations: "#8b5cf6",
 }
 
 export default function Home() {
@@ -286,6 +309,11 @@ export default function Home() {
       return title.includes(q) || desc.includes(q)
     })
   }, [searchQuery, t, cardDefs])
+  const totalRoadmaps = cardDefs.length
+  const totalNodesCount = useMemo(
+    () => roadmaps.reduce((acc, roadmap) => acc + roadmap.nodes.length, 0),
+    [],
+  )
 
   return (
     <>
@@ -310,8 +338,8 @@ export default function Home() {
         {/* Stats bar */}
         <div className="mb-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {[
-            { label: "Roadmaps", value: "12" },
-            { label: t.nodes, value: "84" },
+            { label: "Roadmaps", value: String(totalRoadmaps) },
+            { label: t.nodes, value: String(totalNodesCount) },
             {
               label: t.catSapKeyUser.split(" ").slice(-2).join(" "),
               value: "SAP",

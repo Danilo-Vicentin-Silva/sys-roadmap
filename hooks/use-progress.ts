@@ -9,6 +9,9 @@ interface CompletedChecklist {
   [nodeId: string]: string[]
 }
 
+const EMPTY_NODES: string[] = []
+const EMPTY_CHECKLIST: CompletedChecklist = {}
+
 // Module-level state to share across all hook instances
 let globalCompletedNodes: string[] = []
 let globalCompletedChecklist: CompletedChecklist = {}
@@ -37,6 +40,18 @@ function getChecklistSnapshot() {
   return globalCompletedChecklist
 }
 
+function getServerClientSnapshot() {
+  return false
+}
+
+function getServerNodesSnapshot() {
+  return EMPTY_NODES
+}
+
+function getServerChecklistSnapshot() {
+  return EMPTY_CHECKLIST
+}
+
 interface UseProgressReturn {
   completedNodes: string[]
   completedChecklist: CompletedChecklist
@@ -61,17 +76,17 @@ export function useProgress(): UseProgressReturn {
   const isClient = useSyncExternalStore(
     subscribe,
     getClientSnapshot,
-    () => false,
+    getServerClientSnapshot,
   )
   const completedNodes = useSyncExternalStore(
     subscribe,
     getNodesSnapshot,
-    () => [],
+    getServerNodesSnapshot,
   )
   const completedChecklist = useSyncExternalStore(
     subscribe,
     getChecklistSnapshot,
-    () => ({}),
+    getServerChecklistSnapshot,
   )
 
   // Initialize client-side state on mount

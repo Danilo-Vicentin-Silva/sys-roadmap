@@ -19,6 +19,7 @@ export const translations = {
     catSapConsultant: "SAP Consultant Tracks",
     catMicrosoft: "Auxiliary Corporate Tools",
     catDemand: "Demand & Service Management",
+    catFoundations: "Cross-Journey Foundations",
 
     // Cards
     cardSapMM: "SAP MM Key User",
@@ -34,6 +35,7 @@ export const translations = {
     cardServiceNow: "ServiceNow",
     cardSharePoint: "SharePoint Workflows",
     cardDemand: "Demand & Service Mgmt", // Added for the Demand roadmap
+    cardJourneyFoundations: "Journey Foundations",
 
     // Card descriptions
     descSapMM: "Materials Management — procurement, inventory & valuation",
@@ -49,6 +51,8 @@ export const translations = {
     descServiceNow: "ITSM, incident & change management workflows",
     descSharePoint: "Intranet, document libraries & Power Automate integration",
     descDemand: "Custom workflows, SharePoint lists, and service architecture.", // Added for Demand roadmap
+    descJourneyFoundations:
+      "Core knowledge baseline required across SAP, Microsoft, and service journeys",
 
     // Roadmap view
     backToHome: "Back to Roadmaps",
@@ -73,6 +77,7 @@ export const translations = {
     nodeMM5: "Inventory Management",
     nodeMM6: "Invoice Verification",
     nodeMM7: "Reporting & Analytics",
+    nodeMM8: "Governance, KPIs & Continuous Improvement",
 
     // Power Apps nodes
     nodePA1: "Power Platform Fundamentals",
@@ -82,12 +87,14 @@ export const translations = {
     nodePA5: "Connectors & Integration",
     nodePA6: "ALM & Deployment",
     nodePA7: "Governance & Security",
+    nodePA8: "Solution Architecture & CoE Practices",
 
     // Demand Mgmt nodes (Added)
     nodeDM1: "Requirement Gathering",
     nodeDM2: "Database & Schema Modeling",
     nodeDM3: "Workflow Automation",
     nodeDM4: "SLA Tracking",
+    nodeDM5: "Service Governance & Improvement Cycle",
 
     // SAP SD Key User nodes
     nodeSD1: "Introduction to SAP SD",
@@ -97,6 +104,8 @@ export const translations = {
     nodeSD5: "Shipping & Transportation",
     nodeSD6: "Billing & Invoicing",
     nodeSD7: "Reporting & Analytics",
+    nodeSD8: "Returns, Credits & Exceptions",
+    nodeSD9: "OTC KPI Management",
 
     // SAP FI Key User nodes
     nodeFI1: "Introduction to SAP FI",
@@ -106,6 +115,7 @@ export const translations = {
     nodeFI5: "Accounts Receivable",
     nodeFI6: "Asset Accounting",
     nodeFI7: "Reporting & Analytics",
+    nodeFI8: "Closing Cycle & Internal Controls",
 
     // SAP MM Consultant nodes
     nodeCMM1: "MM Configuration Fundamentals",
@@ -116,6 +126,7 @@ export const translations = {
     nodeCMM6: "MM Reporting",
     nodeCMM7: "Integration Points",
     nodeCMM8: "Advanced Customizing",
+    nodeCMM9: "Testing, Cutover & Hypercare",
 
     // SAP SD Consultant nodes
     nodeCSD1: "SD Configuration Fundamentals",
@@ -126,6 +137,7 @@ export const translations = {
     nodeCSD6: "Billing Configuration",
     nodeCSD7: "SD Integration",
     nodeCSD8: "Advanced SD Customizing",
+    nodeCSD9: "Testing, Cutover & Hypercare",
 
     // SAP FI Consultant nodes
     nodeCFI1: "FI Configuration Fundamentals",
@@ -136,6 +148,7 @@ export const translations = {
     nodeCFI6: "Asset Accounting Config",
     nodeCFI7: "Bank Configuration",
     nodeCFI8: "Advanced FI Customizing",
+    nodeCFI9: "Testing, Cutover & Hypercare",
 
     // Power Automate nodes
     nodePAU1: "Power Automate Fundamentals",
@@ -145,6 +158,7 @@ export const translations = {
     nodePAU5: "Scheduled Flows",
     nodePAU6: "RPA & UI Flows",
     nodePAU7: "Connectors & Integration",
+    nodePAU8: "Monitoring, Resilience & ALM",
 
     // Power BI nodes
     nodePBI1: "Power BI Introduction",
@@ -154,6 +168,7 @@ export const translations = {
     nodePBI5: "Visualizations",
     nodePBI6: "Power BI Service",
     nodePBI7: "Security & Sharing",
+    nodePBI8: "DataOps, Governance & Adoption",
 
     // Jira nodes
     nodeJira1: "Jira Fundamentals",
@@ -163,6 +178,7 @@ export const translations = {
     nodeJira5: "Scrum Framework",
     nodeJira6: "Kanban Framework",
     nodeJira7: "Reports & Dashboards",
+    nodeJira8: "Portfolio Metrics & Continuous Improvement",
 
     // ServiceNow nodes
     nodeSN1: "ServiceNow Introduction",
@@ -172,6 +188,7 @@ export const translations = {
     nodeSN5: "Change Management",
     nodeSN6: "Asset Management",
     nodeSN7: "Service Catalog",
+    nodeSN8: "Operational Excellence & Governance",
 
     // SharePoint nodes
     nodeSP1: "SharePoint Introduction",
@@ -181,6 +198,17 @@ export const translations = {
     nodeSP5: "Integration & APIs",
     nodeSP6: "Automation & Bots",
     nodeSP7: "Governance & Security",
+    nodeSP8: "Adoption, Change Management & Compliance",
+
+    // Journey Foundations nodes
+    nodeJF1: "Enterprise Process Mindset",
+    nodeJF2: "Data Quality & Master Data Discipline",
+    nodeJF3: "Finance and Business Impact Basics",
+    nodeJF4: "Low-Code Platform Fundamentals",
+    nodeJF5: "Automation and Integration Patterns",
+    nodeJF6: "Analytics and KPI Storytelling",
+    nodeJF7: "Service Management and Prioritization",
+    nodeJF8: "Governance, Security and Continuous Learning",
 
     // Node details — MM Procure-to-Pay
     detailP2PTitle: "Procure-to-Pay",
@@ -1034,6 +1062,7 @@ export const translations = {
     catSapConsultant: "Trilhas SAP Consultor",
     catMicrosoft: "Ferramentas Corporativas Auxiliares",
     catDemand: "Ferramentas de Demanda e Serviços",
+    catFoundations: "Fundamentos Transversais",
 
     // Cards
     cardSapMM: "SAP MM Key User",
@@ -1049,6 +1078,7 @@ export const translations = {
     cardServiceNow: "ServiceNow",
     cardSharePoint: "Fluxos SharePoint",
     cardDemand: "Gestão de Demandas", // Added
+    cardJourneyFoundations: "Fundamentos da Jornada",
 
     // Card descriptions
     descSapMM: "Gestão de Materiais — compras, estoque e avaliação",
@@ -1066,6 +1096,8 @@ export const translations = {
       "Intranet, bibliotecas de documentos e integração Power Automate",
     descDemand:
       "Fluxos de trabalho customizados, listas SharePoint e arquitetura de serviços.", // Added
+    descJourneyFoundations:
+      "Base de conhecimentos essenciais para evoluir em trilhas SAP, Microsoft e gestão de serviços",
 
     // Roadmap view
     backToHome: "Voltar aos Roadmaps",
@@ -1090,6 +1122,7 @@ export const translations = {
     nodeMM5: "Gestão de Estoque",
     nodeMM6: "Verificação de Faturas",
     nodeMM7: "Relatórios e Análises",
+    nodeMM8: "Governança, KPIs e Melhoria Contínua",
 
     // Power Apps nodes
     nodePA1: "Fundamentos da Power Platform",
@@ -1099,12 +1132,14 @@ export const translations = {
     nodePA5: "Conectores e Integração",
     nodePA6: "ALM e Implantação",
     nodePA7: "Governança e Segurança",
+    nodePA8: "Arquitetura da Solução e Práticas de CoE",
 
     // Demand Mgmt nodes (Added)
     nodeDM1: "Levantamento de Requisitos",
     nodeDM2: "Modelagem de Dados e Schemas",
     nodeDM3: "Automação de Workflows",
     nodeDM4: "Rastreamento de SLAs",
+    nodeDM5: "Governança de Serviços e Ciclo de Melhoria",
 
     // SAP SD Key User nodes
     nodeSD1: "Introdução ao SAP SD",
@@ -1114,6 +1149,8 @@ export const translations = {
     nodeSD5: "Entrega e Transporte",
     nodeSD6: "Faturamento e Faturas",
     nodeSD7: "Relatórios e Análises",
+    nodeSD8: "Devoluções, Créditos e Exceções",
+    nodeSD9: "Gestão de KPIs do OTC",
 
     // SAP FI Key User nodes
     nodeFI1: "Introdução ao SAP FI",
@@ -1123,6 +1160,7 @@ export const translations = {
     nodeFI5: "Contas a Receber",
     nodeFI6: "Contabilidade de Ativos",
     nodeFI7: "Relatórios e Análises",
+    nodeFI8: "Fechamento e Controles Internos",
 
     // SAP MM Consultant nodes
     nodeCMM1: "Fundamentos de Configuração MM",
@@ -1133,6 +1171,7 @@ export const translations = {
     nodeCMM6: "Relatórios MM",
     nodeCMM7: "Pontos de Integração",
     nodeCMM8: "Customização Avançada",
+    nodeCMM9: "Testes, Cutover e Hypercare",
 
     // SAP SD Consultant nodes
     nodeCSD1: "Fundamentos de Configuração SD",
@@ -1143,6 +1182,7 @@ export const translations = {
     nodeCSD6: "Configuração de Faturamento",
     nodeCSD7: "Integração SD",
     nodeCSD8: "Customização Avançada SD",
+    nodeCSD9: "Testes, Cutover e Hypercare",
 
     // SAP FI Consultant nodes
     nodeCFI1: "Fundamentos de Configuração FI",
@@ -1153,6 +1193,7 @@ export const translations = {
     nodeCFI6: "Configuração de Contabilidade de Ativos",
     nodeCFI7: "Configuração Bancária",
     nodeCFI8: "Customização Avançada FI",
+    nodeCFI9: "Testes, Cutover e Hypercare",
 
     // Power Automate nodes
     nodePAU1: "Fundamentos do Power Automate",
@@ -1162,6 +1203,7 @@ export const translations = {
     nodePAU5: "Fluxos Agendados",
     nodePAU6: "RPA e Fluxos de UI",
     nodePAU7: "Conectores e Integração",
+    nodePAU8: "Monitoramento, Resiliência e ALM",
 
     // Power BI nodes
     nodePBI1: "Introdução ao Power BI",
@@ -1171,6 +1213,7 @@ export const translations = {
     nodePBI5: "Visualizações",
     nodePBI6: "Power BI Service",
     nodePBI7: "Segurança e Compartilhamento",
+    nodePBI8: "DataOps, Governança e Adoção",
 
     // Jira nodes
     nodeJira1: "Fundamentos do Jira",
@@ -1180,6 +1223,7 @@ export const translations = {
     nodeJira5: "Framework Scrum",
     nodeJira6: "Framework Kanban",
     nodeJira7: "Relatórios e Dashboards",
+    nodeJira8: "Métricas de Portfólio e Melhoria Contínua",
 
     // ServiceNow nodes
     nodeSN1: "Introdução ao ServiceNow",
@@ -1189,6 +1233,7 @@ export const translations = {
     nodeSN5: "Gestão de Mudanças",
     nodeSN6: "Gestão de Ativos",
     nodeSN7: "Catálogo de Serviços",
+    nodeSN8: "Excelência Operacional e Governança",
 
     // SharePoint nodes
     nodeSP1: "Introdução ao SharePoint",
@@ -1198,6 +1243,17 @@ export const translations = {
     nodeSP5: "Integração e APIs",
     nodeSP6: "Automação e Bots",
     nodeSP7: "Governança e Segurança",
+    nodeSP8: "Adoção, Gestão da Mudança e Compliance",
+
+    // Journey Foundations nodes
+    nodeJF1: "Mentalidade de Processos Empresariais",
+    nodeJF2: "Qualidade de Dados e Disciplina de Cadastro Mestre",
+    nodeJF3: "Fundamentos Financeiros e Impacto no Negócio",
+    nodeJF4: "Fundamentos de Plataformas Low-Code",
+    nodeJF5: "Padrões de Automação e Integração",
+    nodeJF6: "Analytics e Storytelling com KPIs",
+    nodeJF7: "Gestão de Serviços e Priorização",
+    nodeJF8: "Governança, Segurança e Aprendizado Contínuo",
 
     // Node details — MM Procure-to-Pay
     detailP2PTitle: "Procure-to-Pay",
