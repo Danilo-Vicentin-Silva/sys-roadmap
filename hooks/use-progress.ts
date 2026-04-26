@@ -4,6 +4,22 @@ import { useState, useEffect, useCallback, useSyncExternalStore } from "react"
 
 const STORAGE_KEY = "roadmap-completed-nodes"
 const CHECKLIST_STORAGE_KEY = "roadmap-completed-checklist"
+const MM_MIGRATION_KEY = "sap-mm-roadmap-version"
+const MM_ROADMAP_VERSION = "2026-04-mm-overhaul-v1"
+const SAP_MM_NODE_IDS = new Set([
+  "mm1",
+  "mm2",
+  "mm3",
+  "mm4",
+  "mm5",
+  "mm6",
+  "mm7",
+  "mm8",
+  "mm9",
+  "mm10",
+  "mm11",
+  "mm12",
+])
 
 interface CompletedChecklist {
   [nodeId: string]: string[]
@@ -111,6 +127,27 @@ export function useProgress(): UseProgressReturn {
         if (parsed && typeof parsed === "object") {
           globalCompletedChecklist = parsed
         }
+      }
+
+      // Migrate SAP MM progress after roadmap/content overhaul.
+      // This avoids old checkbox indexes/status leaking into the new MM journey.
+      const currentMmVersion = localStorage.getItem(MM_MIGRATION_KEY)
+      if (currentMmVersion !== MM_ROADMAP_VERSION) {
+        globalCompletedNodes = globalCompletedNodes.filter(
+          (nodeId) => !SAP_MM_NODE_IDS.has(nodeId),
+        )
+
+        const cleanedChecklist: CompletedChecklist = {}
+        for (const [nodeId, checkedItems] of Object.entries(
+          globalCompletedChecklist,
+        )) {
+          if (!SAP_MM_NODE_IDS.has(nodeId)) {
+            cleanedChecklist[nodeId] = checkedItems
+          }
+        }
+        globalCompletedChecklist = cleanedChecklist
+
+        localStorage.setItem(MM_MIGRATION_KEY, MM_ROADMAP_VERSION)
       }
     } catch (error) {
       console.error("Failed to load progress from localStorage:", error)
