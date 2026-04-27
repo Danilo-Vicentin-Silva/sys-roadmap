@@ -126,6 +126,13 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
   const [selectedNode, setSelectedNode] = useState<RoadmapNode | null>(null)
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const { completedChecklist, isLoading } = useProgress()
+  const [isVisible, setIsVisible] = useState(false)
+
+  // Trigger entrance animation after mount
+  useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(true), 100)
+    return () => clearTimeout(timer)
+  }, [])
 
   const cssVars = useCssVars([
     "--neon-yellow",
@@ -218,7 +225,8 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
             const fromProgress =
               fromTotalItems > 0
                 ? Math.round(
-                    ((completedChecklist[from.id]?.length || 0) / fromTotalItems) *
+                    ((completedChecklist[from.id]?.length || 0) /
+                      fromTotalItems) *
                       100,
                   )
                 : 0
@@ -250,12 +258,17 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
                 key={i}
                 d={buildPath(from, to)}
                 stroke={stroke}
-                strokeWidth={fromProgress === 100 ? 2.5 : fromProgress > 0 ? 2 : 2.25}
+                strokeWidth={
+                  fromProgress === 100 ? 2.5 : fromProgress > 0 ? 2 : 2.25
+                }
                 strokeDasharray={dashArray}
                 strokeLinecap={dashArray ? "round" : undefined}
                 fill="none"
                 markerEnd={`url(#${markerId})`}
-                opacity={opacity}
+                opacity={isVisible ? opacity : 0}
+                style={{
+                  transition: `opacity 0.5s ease-out ${i * 0.1}s`,
+                }}
               />
             )
           })}
@@ -328,7 +341,12 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
                 role="button"
                 aria-label={label}
                 onKeyDown={(e) => e.key === "Enter" && handleNodeClick(node)}
-                style={{ outline: "none" }}
+                style={{
+                  outline: "none",
+                  opacity: isVisible ? 1 : 0,
+                  transform: isVisible ? "translateY(0)" : "translateY(20px)",
+                  transition: `opacity 0.4s ease-out ${roadmap.nodes.indexOf(node) * 0.08}s, transform 0.4s ease-out ${roadmap.nodes.indexOf(node) * 0.08}s`,
+                }}
               >
                 {/* Glow layer */}
                 {(effectiveStatus !== "todo" || isHovered) && (
@@ -363,7 +381,9 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
                     y={textY + li * lineH}
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    fill={isHovered && effectiveStatus === "todo" ? yellow : text}
+                    fill={
+                      isHovered && effectiveStatus === "todo" ? yellow : text
+                    }
                     style={{
                       fontFamily: "'Space Mono', monospace",
                       fontSize: "11px",
@@ -374,16 +394,17 @@ export function RoadmapDiagram({ roadmap }: RoadmapDiagramProps) {
                   </text>
                 ))}
 
-                {effectiveStatus === "in-progress" && checklistProgress === 0 && (
-                  <circle
-                    cx={node.x + node.width - 10}
-                    cy={node.y + 10}
-                    r={4}
-                    fill={cssVars["--secondary"] || "#0a0a0a"}
-                    stroke={green}
-                    strokeWidth={1.5}
-                  />
-                )}
+                {effectiveStatus === "in-progress" &&
+                  checklistProgress === 0 && (
+                    <circle
+                      cx={node.x + node.width - 10}
+                      cy={node.y + 10}
+                      r={4}
+                      fill={cssVars["--secondary"] || "#0a0a0a"}
+                      stroke={green}
+                      strokeWidth={1.5}
+                    />
+                  )}
 
                 {/* User progress indicator - matches legend: Yellow=Completed, Green=In Progress */}
                 {!isLoading && checklistProgress > 0 && (
