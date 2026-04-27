@@ -18,6 +18,11 @@ import {
 } from "lucide-react"
 import { Header } from "@/components/header"
 import { RoadmapCard } from "@/components/roadmap-card"
+import {
+  FadeIn,
+  StaggerContainer,
+  StaggerItem,
+} from "@/components/motion-wrapper"
 import { useLang } from "@/lib/lang-context"
 import { useProgress } from "@/hooks/use-progress"
 import { nodeDetails, roadmaps } from "@/lib/roadmap-data"
@@ -205,7 +210,9 @@ function buildCardDefs(
       const checklistItems = detail
         ? (translations[lang][detail.checklistKey] as unknown as string[])
         : []
-      const totalItems = Array.isArray(checklistItems) ? checklistItems.length : 0
+      const totalItems = Array.isArray(checklistItems)
+        ? checklistItems.length
+        : 0
       const completedItems = completedChecklist[node.id]?.length || 0
 
       if (totalItems === 0) {
@@ -320,99 +327,114 @@ export default function Home() {
       <Header onSearch={setSearchQuery} />
       <main className="mx-auto max-w-[1200px] px-4 py-10 md:px-6">
         {/* Hero */}
-        <section className="mb-12 text-center">
-          <div className="inline-flex items-center gap-2 rounded-sm border border-primary/30 bg-primary/5 px-3 py-1 mb-4">
-            <Terminal className="h-3.5 w-3.5 text-primary" aria-hidden />
-            <span className="font-mono text-xs text-primary">
-              Enterprise Technology Ecosystem
-            </span>
-          </div>
-          <h1 className="font-mono text-3xl font-bold text-foreground text-balance mb-3 md:text-4xl">
-            {t.homeTitle}
-          </h1>
-          <p className="mx-auto max-w-xl text-sm text-muted-foreground leading-relaxed text-pretty">
-            {t.homeSubtitle}
-          </p>
-        </section>
+        <FadeIn delay={0.1}>
+          <section className="mb-12 text-center">
+            <div className="inline-flex items-center gap-2 rounded-sm border border-primary/30 bg-primary/5 px-3 py-1 mb-4">
+              <Terminal className="h-3.5 w-3.5 text-primary" aria-hidden />
+              <span className="font-mono text-xs text-primary">
+                Enterprise Technology Ecosystem
+              </span>
+            </div>
+            <h1 className="font-mono text-3xl font-bold text-foreground text-balance mb-3 md:text-4xl">
+              {t.homeTitle}
+            </h1>
+            <p className="mx-auto max-w-xl text-sm text-muted-foreground leading-relaxed text-pretty">
+              {t.homeSubtitle}
+            </p>
+          </section>
+        </FadeIn>
 
         {/* Stats bar */}
-        <div className="mb-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {[
-            { label: "Roadmaps", value: String(totalRoadmaps) },
-            { label: t.nodes, value: String(totalNodesCount) },
-            {
-              label: t.catSapKeyUser.split(" ").slice(-2).join(" "),
-              value: "SAP",
-            },
-            { label: "Power Platform", value: "MS" },
-          ].map((stat, i) => (
-            <div
-              key={i}
-              className="rounded-sm border border-border bg-card p-3 text-center"
-            >
-              <p className="font-mono text-2xl font-bold text-primary">
-                {stat.value}
-              </p>
-              <p className="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                {stat.label}
-              </p>
-            </div>
-          ))}
-        </div>
+        <StaggerContainer staggerDelay={0.05} delayChildren={0.2}>
+          <div className="mb-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {[
+              { label: "Roadmaps", value: String(totalRoadmaps) },
+              { label: t.nodes, value: String(totalNodesCount) },
+              {
+                label: t.catSapKeyUser.split(" ").slice(-2).join(" "),
+                value: "SAP",
+              },
+              { label: "Power Platform", value: "MS" },
+            ].map((stat, i) => (
+              <StaggerItem key={i}>
+                <div className="rounded-sm border border-border bg-card p-3 text-center">
+                  <p className="font-mono text-2xl font-bold text-primary">
+                    {stat.value}
+                  </p>
+                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                    {stat.label}
+                  </p>
+                </div>
+              </StaggerItem>
+            ))}
+          </div>
+        </StaggerContainer>
 
         {/* Cards by category */}
         {searchQuery ? (
           /* Search results flat view */
-          <div>
-            <p className="mb-4 font-mono text-xs text-muted-foreground">
-              {filteredCards.length} resultado
-              {filteredCards.length !== 1 ? "s" : ""}
-            </p>
+          <StaggerContainer staggerDelay={0.05} delayChildren={0.3}>
+            <FadeIn delay={0.2}>
+              <p className="mb-4 font-mono text-xs text-muted-foreground">
+                {filteredCards.length} resultado
+                {filteredCards.length !== 1 ? "s" : ""}
+              </p>
+            </FadeIn>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {filteredCards.map((card) => (
-                <RoadmapCard key={card.id} {...card} />
+                <StaggerItem key={card.id}>
+                  <RoadmapCard {...card} />
+                </StaggerItem>
               ))}
             </div>
-          </div>
+          </StaggerContainer>
         ) : (
           /* Categorized grid */
-          <div className="space-y-10">
-            {categories.map((cat) => {
-              const cards = cardDefs.filter((c) => cat.ids.includes(c.id))
-              const color = categoryColors[cat.id]
-              return (
-                <section key={cat.id} aria-labelledby={`cat-${cat.id}`}>
-                  <div className="mb-4 flex items-center gap-3">
-                    <div
-                      className="h-5 w-1 rounded-full"
-                      style={{ backgroundColor: color }}
-                      aria-hidden
-                    />
-                    <h2
-                      id={`cat-${cat.id}`}
-                      className="font-mono text-sm font-bold uppercase tracking-widest text-foreground"
-                    >
-                      {t[cat.titleKey] as string}
-                    </h2>
-                  </div>
-                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    {cards.map((card) => (
-                      <RoadmapCard key={card.id} {...card} />
-                    ))}
-                  </div>
-                </section>
-              )
-            })}
-          </div>
+          <StaggerContainer staggerDelay={0.08} delayChildren={0.3}>
+            <div className="space-y-10">
+              {categories.map((cat) => {
+                const cards = cardDefs.filter((c) => cat.ids.includes(c.id))
+                const color = categoryColors[cat.id]
+                return (
+                  <section key={cat.id} aria-labelledby={`cat-${cat.id}`}>
+                    <StaggerItem>
+                      <div className="mb-4 flex items-center gap-3">
+                        <div
+                          className="h-5 w-1 rounded-full"
+                          style={{ backgroundColor: color }}
+                          aria-hidden
+                        />
+                        <h2
+                          id={`cat-${cat.id}`}
+                          className="font-mono text-sm font-bold uppercase tracking-widest text-foreground"
+                        >
+                          {t[cat.titleKey] as string}
+                        </h2>
+                      </div>
+                    </StaggerItem>
+                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      {cards.map((card) => (
+                        <StaggerItem key={card.id}>
+                          <RoadmapCard {...card} />
+                        </StaggerItem>
+                      ))}
+                    </div>
+                  </section>
+                )
+              })}
+            </div>
+          </StaggerContainer>
         )}
 
         {/* Community note */}
-        <div className="mt-14 border-t border-border pt-8 text-center">
-          <div className="flex items-center justify-center gap-2 text-muted-foreground">
-            <Users className="h-4 w-4" aria-hidden />
-            <p className="text-xs">{t.communityNote}</p>
+        <FadeIn delay={0.5}>
+          <div className="mt-14 border-t border-border pt-8 text-center">
+            <div className="flex items-center justify-center gap-2 text-muted-foreground">
+              <Users className="h-4 w-4" aria-hidden />
+              <p className="text-xs">{t.communityNote}</p>
+            </div>
           </div>
-        </div>
+        </FadeIn>
       </main>
     </>
   )
