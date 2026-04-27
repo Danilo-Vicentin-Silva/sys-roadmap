@@ -76,7 +76,7 @@ function getEffectiveStatus(
 }
 
 const CANVAS_W = 840
-const CANVAS_H = 940
+const CANVAS_H = 1500
 
 function getNodeCenter(node: RoadmapNode) {
   return { cx: node.x + node.width / 2, cy: node.y + node.height / 2 }

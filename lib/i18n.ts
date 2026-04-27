@@ -112,14 +112,20 @@ export const translations = {
     nodeSD9: "OTC KPI Management",
 
     // SAP FI Key User nodes
-    nodeFI1: "Introduction to SAP FI",
-    nodeFI2: "Organizational Structure",
-    nodeFI3: "General Ledger",
-    nodeFI4: "Accounts Payable",
-    nodeFI5: "Accounts Receivable",
-    nodeFI6: "Asset Accounting",
-    nodeFI7: "Reporting & Analytics",
-    nodeFI8: "Closing Cycle & Internal Controls",
+    nodeFI1: "Org Structure & CoA",
+    nodeFI2: "G/L Master Data",
+    nodeFI3: "Document Posting",
+    nodeFI4: "Vendor Master Data",
+    nodeFI5: "AP Invoice Processing",
+    nodeFI6: "Automatic Payment Program",
+    nodeFI7: "Customer Master Data",
+    nodeFI8: "AR Invoices & Payments",
+    nodeFI9: "Dunning Process",
+    nodeFI10: "Asset Master Data",
+    nodeFI11: "Asset Depreciation",
+    nodeFI12: "Electronic Bank Statement",
+    nodeFI13: "Financial Reporting",
+    nodeFI14: "Month-End Closing",
 
     // SAP MM Consultant nodes
     nodeCMM1: "MM Configuration Fundamentals",
@@ -280,7 +286,8 @@ export const translations = {
       "Differentiate material type (FERT, ROH, HAWA) vs. material group",
     ],
 
-    detailMMPurchasingMasterTitle: "Purchasing Master Data (Pricing and Sourcing)",
+    detailMMPurchasingMasterTitle:
+      "Purchasing Master Data (Pricing and Sourcing)",
     detailMMPurchasingMasterTheory:
       "This is where SAP learns automation. Info Records connect material and vendor with negotiated prices, while Source Lists define approved suppliers by period.",
     detailMMPurchasingMasterTechnical:
@@ -369,8 +376,7 @@ export const translations = {
     detailMMMrpTitle: "MRP and Supply Planning",
     detailMMMrpTheory:
       "MRP is the replenishment engine. It reads stock, demand, and lead times to generate purchase proposals, preventing production disruption.",
-    detailMMMrpTechnical:
-      "Transactions: MD01N, MD04. Tables: MDKP, MDTB.",
+    detailMMMrpTechnical: "Transactions: MD01N, MD04. Tables: MDKP, MDTB.",
     detailMMMrpChecklist: [
       "Analyze a material profile in MD04",
       "Differentiate reorder point vs. PD planning",
@@ -464,82 +470,173 @@ export const translations = {
       "Integrate with FI for revenue posting",
     ],
 
-    // ===== SAP FI KEY USER =====
-    detailIntroFITitle: "Introduction to SAP FI",
-    detailIntroFITheory:
-      "SAP Financial Accounting (FI) is the core module for financial processes in SAP. It handles General Ledger (GL), Accounts Payable (AP), Accounts Receivable (AR), and Asset Accounting. FI is the central component that records all financial transactions and provides the foundation for financial reporting.",
-    detailIntroFITechnical:
-      "Key FI Tables: BKPF (Accounting Document Header), BSEG (Accounting Document Segment), SKA1 (G/L Account Master), KNA1 (Customer Master), LFA1 (Vendor Master), ANLA (Asset Master).",
-    detailIntroFIChecklist: [
-      "Understand FI module scope",
-      "Navigate SAP Easy Access menu for FI",
-      "Identify key FI transactions (FB01, FBL1N, FBL3N)",
-      "Understand integration with other modules",
+    // ===== SAP FI KEY USER - Comprehensive 14-Node Journey =====
+    detailFIOrgStructureTitle: "Org Structure & Chart of Accounts",
+    detailFIOrgStructureTheory:
+      "SAP FI organizational structure defines the hierarchy of financial entities: Company Code (independent accounting unit), Chart of Accounts (structure of G/L accounts), and Fiscal Year variants. This foundation determines how financial transactions are recorded and reported across the enterprise.",
+    detailFIOrgStructureTechnical:
+      "Transactions: OBX1 (Assign CoA to Company Code), OBY6 (Fiscal Year Variant), S_ALR_87011990 (Display Org Structure). Tables: T001 (Company Codes), T004 (Chart of Accounts), T009 (Fiscal Year Variants).",
+    detailFIOrgStructureChecklist: [
+      "Map your company's organizational units in SAP",
+      "Assign Chart of Accounts to Company Code",
+      "Configure fiscal year variants",
+      "Understand the relationship between CoA and Company Code",
     ],
 
-    detailGLTitle: "General Ledger",
-    detailGLTheory:
-      "The General Ledger is the heart of SAP Financial Accounting. It records all business transactions and provides the foundation for financial statements. GL accounts are organized in a chart of accounts, and posting is done through document types that control the flow and numbering.",
-    detailGLTechnical:
-      "Tables: SKB1 (G/L Account Master - Company Code), SKAT (G/L Account Texts). Transactions: FSP0 (Display G/L Account), FS10N (Display Balance), FB03 (Display Document).",
-    detailGLChecklist: [
-      "Understand chart of accounts structure",
-      "Post journal entries (FB01)",
-      "Configure document types",
-      "Understand posting keys",
-      "Run GL reports (F.10, S_ALR_87011084)",
+    detailFIGLMasterDataTitle: "G/L Master Data Management",
+    detailFIGLMasterDataTheory:
+      "G/L Master Data includes the Chart of Accounts structure and individual G/L accounts. Each account belongs to an account group, has a specific account type (P&L or Balance Sheet), and controls posting rules. Proper G/L setup ensures accurate financial reporting and compliance.",
+    detailFIGLMasterDataTechnical:
+      "Transactions: FS00 (Create G/L Account), FSP0 (Display G/L Account), OB13 (Account Groups). Tables: SKA1 (Chart of Accounts), SKB1 (G/L Account - Company Code), SKAT (Account Descriptions).",
+    detailFIGLMasterDataChecklist: [
+      "Create and extend G/L accounts in multiple company codes",
+      "Configure account groups and field status",
+      "Set up reconciliation accounts for AP/AR/Assets",
+      "Validate G/L account number ranges",
     ],
 
-    detailAPTitle: "Accounts Payable",
-    detailAPTheory:
-      "Accounts Payable manages all vendor invoices and payments. It tracks outstanding vendor balances and integrates with MM for invoice verification. The system supports automatic payment programs and provides tools for vendor analysis and aging.",
-    detailAPTechnical:
-      "Tables: LFB1 (Vendor Master - Company Code), BSEG (with KOART = 'K'). Transactions: FK01 (Create Vendor), FB60 (Enter Invoice), F-44 (Clear Vendor).",
-    detailAPChecklist: [
-      "Create vendor master records (FK01)",
-      "Post vendor invoices (FB60)",
-      "Process vendor payments",
-      "Run payment run (F110)",
-      "Analyze vendor balances (FAGL_F110_V)",
+    detailFIDocumentPostingTitle: "Document Posting Concepts",
+    detailFIDocumentPostingTheory:
+      "Document posting in SAP FI follows the double-entry bookkeeping principle. Each document has a header (date, posting date, document type) and line items (account, amount, posting key). Document types control document numbering and allowed accounts. Posting keys determine debit/credit and field status.",
+    detailFIDocumentPostingTechnical:
+      "Transactions: FB50 (Single Posting), FB01 (Complex Posting), FB03 (Display Document). Tables: BKPF (Document Header), BSEG (Document Line Items), T003 (Document Types).",
+    detailFIDocumentPostingChecklist: [
+      "Post simple journal entries (FB50)",
+      "Understand posting keys (40/50, 31/21, etc.)",
+      "Display and analyze accounting documents (FB03)",
+      "Configure document types and number ranges",
     ],
 
-    detailARTitle: "Accounts Receivable",
-    detailARTheory:
-      "Accounts Receivable manages customer invoices and collections. It tracks outstanding customer balances and supports dunning procedures for overdue payments. AR integrates with SD for billing documents and provides customer credit management.",
-    detailARTechnical:
-      "Tables: KNB1 (Customer Master - Company Code), BSEG (with KOART = 'D'). Transactions: FD01 (Create Customer), FB70 (Enter Invoice), F-32 (Clear Customer).",
-    detailARChecklist: [
-      "Create customer master records (FD01)",
-      "Post customer invoices (FB70)",
-      "Process incoming payments (F-26)",
-      "Configure dunning procedures",
-      "Run customer reports (F.10, Dunning)",
+    detailFIVendorMasterTitle: "Vendor Master Data (FI View)",
+    detailFIVendorMasterTheory:
+      "Vendor master data in FI includes company code-specific data like payment terms, reconciliation accounts, and withholding tax information. The Business Partner (BP) concept unifies FI and MM views. Vendors are critical for AP integration and automatic payment programs.",
+    detailFIVendorMasterTechnical:
+      "Transactions: BP (Business Partner), FK01 (Create Vendor), XK01 (Extended Vendor). Tables: LFA1 (Vendor General), LFB1 (Vendor Company Code), LFM1 (Vendor Purchasing).",
+    detailFIVendorMasterChecklist: [
+      "Create Business Partner with FI and MM roles",
+      "Configure payment terms and reconciliation accounts",
+      "Set up withholding tax information",
+      "Extend vendor to multiple company codes",
     ],
 
-    detailAssetTitle: "Asset Accounting",
-    detailAssetTheory:
-      "Asset Accounting (FI-AA) manages fixed assets throughout their lifecycle, from acquisition to retirement. It handles depreciation calculation, asset valuations, and integration with GL for asset postings. Supports multiple depreciation methods and parallel asset valuations.",
-    detailAssetTechnical:
-      "Tables: ANLA (Asset Master), ANLC (Asset Values), ANLH (Asset History). Transactions: AS01 (Create Asset), AB01 (Post Capitalization), AB02 (Post Retirement).",
-    detailAssetChecklist: [
-      "Create asset master (AS01)",
-      "Post asset acquisition (AB01)",
-      "Configure depreciation keys",
-      "Run periodic depreciation",
-      "Post asset retirement (AB02)",
+    detailFIAPInvoiceTitle: "AP Invoice Processing & MIRO Integration",
+    detailFIAPInvoiceTheory:
+      "AP invoice processing can be manual (FB60, F-43) or automatic via MM integration (MIRO). MIRO links logistics invoice verification with FI, ensuring 3-way match (PO, GR, Invoice). Automatic postings are made to GR/IR account and vendor reconciliation account.",
+    detailFIAPInvoiceTechnical:
+      "Transactions: FB60 (Enter Invoice), F-43 (Credit Memo), MIRO (Logistics Invoice Verification). Tables: BSEG (with KOART='K'), RSEG (Invoice Document Items), BKPF (Document Header).",
+    detailFIAPInvoiceChecklist: [
+      "Post vendor invoices manually (FB60)",
+      "Process logistics invoices via MIRO",
+      "Handle credit memos and corrections",
+      "Verify GR/IR account reconciliation",
     ],
 
-    detailReportingTitle: "Financial Reporting",
-    detailReportingTheory:
-      "Financial reporting in SAP FI provides comprehensive reporting capabilities including balance sheets, profit & loss statements, and trial balances. Reports can be generated in multiple formats and integrated with SAP Business Warehouse for advanced analysis.",
-    detailReportingTechnical:
-      "Key Reports: F.01 (Balance Carried Forward), F.10 (G/L Account List), S_ALR_87012311 (Balance Sheet), S_ALR_87012312 (P&L Statement).",
-    detailReportingChecklist: [
+    detailFIPaymentProgramTitle: "Automatic Payment Program (F110)",
+    detailFIPaymentProgramTheory:
+      "The Automatic Payment Program (F110) processes vendor payments based due dates, payment terms, and available funds. It generates payment documents, creates payment media (electronic files/print), posts accounting entries, and updates vendor open items. Critical for cash flow management.",
+    detailFIPaymentProgramTechnical:
+      "Transactions: F110 (Automatic Payment Program), FBZP (Payment Configuration). Tables: REGUH (Payment Proposal Header), REGUP (Payment Items), PAYR (Payment Media).",
+    detailFIPaymentProgramChecklist: [
+      "Configure payment methods (check, transfer, electronic)",
+      "Run payment proposal and analyze results",
+      "Generate payment media and post payment documents",
+      "Monitor payment status and vendor aging",
+    ],
+
+    detailFICustomerMasterTitle: "Customer Master Data (FI View)",
+    detailFICustomerMasterTheory:
+      "Customer master data in FI includes company code-specific data like payment terms, reconciliation accounts, dunning procedures, and credit management. The Business Partner (BP) concept unifies FI and SD views. Customers are critical for AR integration and collections.",
+    detailFICustomerMasterTechnical:
+      "Transactions: BP (Business Partner), FD01 (Create Customer), XD01 (Extended Customer). Tables: KNA1 (Customer General), KNB1 (Customer Company Code), KNVV (Customer Sales).",
+    detailFICustomerMasterChecklist: [
+      "Create Business Partner with FI and SD roles",
+      "Configure payment terms and reconciliation accounts",
+      "Set up dunning procedures and credit limits",
+      "Extend customer to multiple company codes",
+    ],
+
+    detailFIARInvoicesTitle: "AR Invoices & Incoming Payments",
+    detailFIARInvoicesTheory:
+      "AR invoice processing can be manual (FB70) or automatic via SD integration (VF01 billing). Incoming payments (F-28) clear customer open items. The system supports partial payments, residual payments, and payment on account. Critical for cash collection and customer reconciliation.",
+    detailFIARInvoicesTechnical:
+      "Transactions: FB70 (Enter Customer Invoice), F-28 (Incoming Payment), F-32 (Clear Open Items). Tables: BSEG (with KOART='D'), BSAD (Cleared Customer Items), BSID (Open Customer Items).",
+    detailFIARInvoicesChecklist: [
+      "Post customer invoices manually (FB70)",
+      "Process incoming payments and clear open items (F-28)",
+      "Handle partial and residual payments",
+      "Analyze customer aging and collection status",
+    ],
+
+    detailFIDunningTitle: "Dunning Process (Collections)",
+    detailFIDunningTheory:
+      "The dunning process automates collection of overdue receivables. Dunning procedures define dunning levels, dunning areas, and dunning forms. The system generates dunning letters, charges interest, and can block customers for further sales. Essential for maintaining cash flow and customer credit discipline.",
+    detailFIDunningTechnical:
+      "Transactions: F150 (Dunning Run), F1500 (Dunning Configuration). Tables: F150T (Dunning Procedures), FKKMA (Dunning Areas), DFKKOP (Dunned Items).",
+    detailFIDunningChecklist: [
+      "Configure dunning procedures and dunning areas",
+      "Run dunning proposal and analyze results",
+      "Generate dunning letters and post interest",
+      "Monitor dunning history and customer blocks",
+    ],
+
+    detailFIAssetMasterTitle: "Asset Master Data",
+    detailFIAssetMasterTheory:
+      "Asset master data captures fixed asset information including asset class, useful life, depreciation area, and capitalization date. Asset classes control asset-specific parameters and default values. Assets integrate with GL for automatic depreciation postings. Critical for fixed asset management and compliance.",
+    detailFIAssetMasterTechnical:
+      "Transactions: AS01 (Create Asset), AS02 (Change Asset), AS03 (Display Asset). Tables: ANLA (Asset Master), ANLH (Asset Time-Dependent Data), T090 (Asset Classes).",
+    detailFIAssetMasterChecklist: [
+      "Create asset master records with correct asset class",
+      "Configure depreciation areas and useful life",
+      "Set up asset subnumbers and components",
+      "Understand asset numbering and intervals",
+    ],
+
+    detailFIDepreciationTitle: "Asset Depreciation & Retirements",
+    detailFIDepreciationTheory:
+      "Depreciation calculations are performed periodically (monthly/annual) using depreciation keys defined in asset classes. The system supports straight-line, declining balance, and special depreciation methods. Asset retirements (sale/scrap) generate postings to gain/loss accounts and clear asset values.",
+    detailFIDepreciationTechnical:
+      "Transactions: AW01N (Asset Explorer), AFAB (Depreciation Run), AB01 (Capitalization), AB02 (Retirement). Tables: ANLC (Asset Values), ANEP (Depreciation Areas), T090 (Depreciation Keys).",
+    detailFIDepreciationChecklist: [
+      "Run periodic depreciation (AFAB)",
+      "Post asset acquisitions and capitalizations (AB01)",
+      "Process asset retirements and transfers (AB02)",
+      "Analyze asset values in Asset Explorer (AW01N)",
+    ],
+
+    detailFIBankStatementTitle: "Electronic Bank Statement (EBS)",
+    detailFIBankStatementTheory:
+      "Electronic Bank Statement (EBS) automates bank account reconciliation by importing bank statement files. The system posts bank transactions, clears open items, and updates bank balances. EBS eliminates manual reconciliation and provides real-time cash position visibility. Critical for treasury management.",
+    detailFIBankStatementTechnical:
+      "Transactions: FF_5 (Manual Bank Statement), FF.5 (Electronic Bank Statement), FEBA (Post-Processing). Tables: FEBKO (Statement Header), FEBEP (Statement Items), BNKA (Bank Master).",
+    detailFIBankStatementChecklist: [
+      "Configure bank accounts and statement formats",
+      "Import and process electronic bank statements (FF.5)",
+      "Post-process unassigned items (FEBA)",
+      "Reconcile bank accounts automatically",
+    ],
+
+    detailFIReportingTitle: "Financial Reporting & Trial Balance",
+    detailFIReportingTheory:
+      "Financial reporting provides comprehensive analysis of financial data including trial balances, balance sheets, profit & loss statements, and cash flow statements. Reports can be generated for any period and company code. Financial Statement Versions (FSV) define the structure for balance sheet and P&L reporting.",
+    detailFIReportingTechnical:
+      "Transactions: F.01 (Balance Carried Forward), F.01 (Trial Balance), S_ALR_87012284 (Balance Sheet), S_ALR_87012285 (P&L Statement), FAGLL03 (G/L Line Items). Tables: SKB1, BKPF, BSEG, FAGLFLEXT (New GL).",
+    detailFIReportingChecklist: [
       "Generate trial balance (F.01)",
-      "Run balance sheet reports",
-      "Run profit & loss statements",
-      "Use financial statement versions",
-      "Export reports to Excel",
+      "Run balance sheet and P&L reports",
+      "Configure Financial Statement Versions (FSV)",
+      "Analyze G/L line items and drill-down (FAGLL03)",
+    ],
+
+    detailFIClosingTitle: "Month-End Closing Activities",
+    detailFIClosingTheory:
+      "Month-end closing ensures all financial transactions are recorded, reconciled, and reported for the period. Activities include period locking (OB52), foreign currency valuation (FAGL_FCV), accruals and deferrals, GR/IR reconciliation, and financial reporting. Critical for accurate financial statements and compliance.",
+    detailFIClosingTechnical:
+      "Transactions: OB52 (Posting Periods), FAGL_FCV (Foreign Currency Valuation), OB08 (Exchange Rates), F.13 (Automatic Clearing), MB5S (GR/IR Reconciliation). Tables: T001B (Posting Periods), TCURR (Exchange Rates), BKPF, BSEG.",
+    detailFIClosingChecklist: [
+      "Lock posting periods (OB52)",
+      "Run foreign currency valuation (FAGL_FCV)",
+      "Reconcile GR/IR accounts and sub-ledgers",
+      "Generate and validate financial statements",
     ],
 
     // ===== SAP MM CONSULTANT =====
@@ -1188,8 +1285,7 @@ export const translations = {
     homeTitle: "Ecossistemas de Tecnologia Corporativa",
     homeSubtitle:
       "Trilhas de aprendizado estruturadas para adoção de tecnologia corporativa. Clique em qualquer trilha para explorar o roadmap completo.",
-    communityNote:
-      "Site desenvolvido por Danilo Vicentin S.",
+    communityNote: "Site desenvolvido por Danilo Vicentin S.",
 
     // Card categories
     catSapKeyUser: "Trilhas SAP Key User",
@@ -1291,14 +1387,20 @@ export const translations = {
     nodeSD9: "Gestão de KPIs do OTC",
 
     // SAP FI Key User nodes
-    nodeFI1: "Introdução ao SAP FI",
-    nodeFI2: "Estrutura Organizacional",
-    nodeFI3: "Livro Razão",
-    nodeFI4: "Contas a Pagar",
-    nodeFI5: "Contas a Receber",
-    nodeFI6: "Contabilidade de Ativos",
-    nodeFI7: "Relatórios e Análises",
-    nodeFI8: "Fechamento e Controles Internos",
+    nodeFI1: "Estrutura Org & Plano de Contas",
+    nodeFI2: "Dados Mestre Conta Razão",
+    nodeFI3: "Lançamento de Documentos",
+    nodeFI4: "Dados Mestre Fornecedor",
+    nodeFI5: "Processamento Faturas AP",
+    nodeFI6: "Programa Pagamento Automático",
+    nodeFI7: "Dados Mestre Cliente",
+    nodeFI8: "Faturas AR e Recebimentos",
+    nodeFI9: "Processo de Cobrança",
+    nodeFI10: "Dados Mestre Ativos",
+    nodeFI11: "Depreciação de Ativos",
+    nodeFI12: "Extrato Bancário Eletrônico",
+    nodeFI13: "Relatórios Financeiros",
+    nodeFI14: "Fechamento Mensal",
 
     // SAP MM Consultant nodes
     nodeCMM1: "Fundamentos de Configuração MM",
@@ -1549,8 +1651,7 @@ export const translations = {
     detailMMMrpTitle: "MRP e Planejamento de Suprimentos",
     detailMMMrpTheory:
       "O MRP é o motor de reposição. Ele lê demanda, estoque e lead time para gerar propostas de compra automaticamente e evitar ruptura de produção.",
-    detailMMMrpTechnical:
-      "Transações: MD01N, MD04. Tabelas: MDKP, MDTB.",
+    detailMMMrpTechnical: "Transações: MD01N, MD04. Tabelas: MDKP, MDTB.",
     detailMMMrpChecklist: [
       "Analisar perfil do material na MD04",
       "Diferenciar ponto de reposição e planejamento PD",
@@ -1644,82 +1745,173 @@ export const translations = {
       "Integrar com FI para lançamento de receita",
     ],
 
-    // ===== SAP FI KEY USER =====
-    detailIntroFITitle: "Introdução ao SAP FI",
-    detailIntroFITheory:
-      "SAP Financial Accounting (FI) é o módulo central do SAP para processos financeiros. Ele gerencia Livro Razão (GL), Contas a Pagar (AP), Contas a Receber (AR) e Contabilidade de Ativos. FI é o componente central que registra todas as transações financeiras e fornece a base para relatórios financeiros.",
-    detailIntroFITechnical:
-      "Tabelas FI Principais: BKPF (Cabeçalho Documento Contábil), BSEG (Segmento Documento Contábil), SKA1 (Mestre Conta Contábil), KNA1 (Mestre Cliente), LFA1 (Mestre Fornecedor), ANLA (Mestre Ativo).",
-    detailIntroFIChecklist: [
-      "Entender escopo do módulo FI",
-      "Navegar pelo menu SAP Easy Access para FI",
-      "Identificar principais transações FI (FB01, FBL1N, FBL3N)",
-      "Entender integração com outros módulos",
+    // ===== SAP FI KEY USER - Jornada Completa de 14 Nós =====
+    detailFIOrgStructureTitle: "Estrutura Organizacional & Plano de Contas",
+    detailFIOrgStructureTheory:
+      "A estrutura organizacional do SAP FI define a hierarquia de entidades financeiras: Código Empresa (unidade contábil independente), Plano de Contas (estrutura de contas contábeis) e variantes de exercício fiscal. Esta base determina como as transações financeiras são registradas e reportadas em toda a empresa.",
+    detailFIOrgStructureTechnical:
+      "Transações: OBX1 (Atribuir Plano de Contas a Código Empresa), OBY6 (Variante de Exercício Fiscal), S_ALR_87011990 (Exibir Estrutura Org). Tabelas: T001 (Códigos Empresa), T004 (Planos de Contas), T009 (Variantes de Exercício Fiscal).",
+    detailFIOrgStructureChecklist: [
+      "Mapear as unidades organizacionais da sua empresa no SAP",
+      "Atribuir Plano de Contas ao Código Empresa",
+      "Configurar variantes de exercício fiscal",
+      "Entender a relação entre Plano de Contas e Código Empresa",
     ],
 
-    detailGLTitle: "Livro Razão",
-    detailGLTheory:
-      "O Livro Razão é o coração da Contabilidade Financeira do SAP. Ele registra todas as transações de negócios e fornece a base para demonstrações financeiras. Contas contábeis são organizadas em um plano de contas, e os lançamentos são feitos através de tipos de documento que controlam o fluxo e numeração.",
-    detailGLTechnical:
-      "Tabelas: SKB1 (Mestre Conta Contábil - Código Empresa), SKAT (Textos Conta Contábil). Transações: FSP0 (Exibir Conta Contábil), FS10N (Exibir Saldo), FB03 (Exibir Documento).",
-    detailGLChecklist: [
-      "Entender estrutura do plano de contas",
-      "Lançar lançamentos contábeis (FB01)",
-      "Configurar tipos de documento",
-      "Entender chaves de lançamento",
-      "Executar relatórios GL (F.10, S_ALR_87011084)",
+    detailFIGLMasterDataTitle: "Gestão de Dados Mestre de Conta Razão",
+    detailFIGLMasterDataTheory:
+      "Dados Mestre de Conta Razão incluem a estrutura do Plano de Contas e contas contábeis individuais. Cada conta pertence a um grupo de contas, tem um tipo específico de conta (P&L ou Balanço) e controla regras de lançamento. Configuração adequada de GL garante relatórios financeiros precisos e conformidade.",
+    detailFIGLMasterDataTechnical:
+      "Transações: FS00 (Criar Conta Contábil), FSP0 (Exibir Conta Contábil), OB13 (Grupos de Contas). Tabelas: SKA1 (Plano de Contas), SKB1 (Conta Contábil - Código Empresa), SKAT (Descrições de Contas).",
+    detailFIGLMasterDataChecklist: [
+      "Criar e estender contas contábeis em múltiplos códigos empresa",
+      "Configurar grupos de contas e status de campos",
+      "Configurar contas de reconciliação para AP/AR/Ativos",
+      "Validar intervalos de números de contas contábeis",
     ],
 
-    detailAPTitle: "Contas a Pagar",
-    detailAPTheory:
-      "Contas a Pagar gerencia todas as faturas e pagamentos de fornecedores. Ele rastreia saldos pendentes de fornecedores e integra-se com MM para verificação de faturas. O sistema suporta programas automáticos de pagamento e fornece ferramentas para análise e aging de fornecedores.",
-    detailAPTechnical:
-      "Tabelas: LFB1 (Mestre Fornecedor - Código Empresa), BSEG (com KOART = 'K'). Transações: FK01 (Criar Fornecedor), FB60 (Lançar Fatura), F-44 (Liquidar Fornecedor).",
-    detailAPChecklist: [
-      "Criar registros de mestre de fornecedores (FK01)",
-      "Lançar faturas de fornecedores (FB60)",
-      "Processar pagamentos de fornecedores",
-      "Executar programa de pagamento (F110)",
-      "Analisar saldos de fornecedores (FAGL_F110_V)",
+    detailFIDocumentPostingTitle: "Conceitos de Lançamento de Documentos",
+    detailFIDocumentPostingTheory:
+      "Lançamento de documentos no SAP FI segue o princípio de contabilidade de partidas dobradas. Cada documento tem um cabeçalho (data, data de lançamento, tipo de documento) e itens (conta, valor, chave de lançamento). Tipos de documento controlam numeração e contas permitidas. Chaves de lançamento determinam débito/crédito e status de campos.",
+    detailFIDocumentPostingTechnical:
+      "Transações: FB50 (Lançamento Simples), FB01 (Lançamento Complexo), FB03 (Exibir Documento). Tabelas: BKPF (Cabeçalho Documento), BSEG (Itens Documento), T003 (Tipos de Documento).",
+    detailFIDocumentPostingChecklist: [
+      "Lançar lançamentos contábeis simples (FB50)",
+      "Entender chaves de lançamento (40/50, 31/21, etc.)",
+      "Exibir e analisar documentos contábeis (FB03)",
+      "Configurar tipos de documento e intervalos de números",
     ],
 
-    detailARTitle: "Contas a Receber",
-    detailARTheory:
-      "Contas a Receber gerencia faturas e cobranças de clientes. Ele rastreia saldos pendentes de clientes e suporta procedimentos de cobrança para pagamentos atrasados. AR integra-se com SD para documentos de faturamento e fornece gestão de crédito de clientes.",
-    detailARTechnical:
-      "Tabelas: KNB1 (Mestre Cliente - Código Empresa), BSEG (com KOART = 'D'). Transações: FD01 (Criar Cliente), FB70 (Lançar Fatura), F-32 (Liquidar Cliente).",
-    detailARChecklist: [
-      "Criar registros de mestre de clientes (FD01)",
-      "Lançar faturas de clientes (FB70)",
-      "Processar recebimentos (F-26)",
-      "Configurar procedimentos de cobrança",
-      "Executar relatórios de clientes (F.10, Cobrança)",
+    detailFIVendorMasterTitle: "Dados Mestre Fornecedor (Visão FI)",
+    detailFIVendorMasterTheory:
+      "Dados Mestre de Fornecedor no FI incluem dados específicos por código empresa como termos de pagamento, contas de reconciliação e informações de retenção na fonte. O conceito de Business Partner (BP) unifica as visões FI e MM. Fornecedores são críticos para integração AP e programas automáticos de pagamento.",
+    detailFIVendorMasterTechnical:
+      "Transações: BP (Business Partner), FK01 (Criar Fornecedor), XK01 (Fornecedor Estendido). Tabelas: LFA1 (Fornecedor Geral), LFB1 (Fornecedor Código Empresa), LFM1 (Fornecedor Compras).",
+    detailFIVendorMasterChecklist: [
+      "Criar Business Partner com papéis FI e MM",
+      "Configurar termos de pagamento e contas de reconciliação",
+      "Configurar informações de retenção na fonte",
+      "Estender fornecedor para múltiplos códigos empresa",
     ],
 
-    detailAssetTitle: "Contabilidade de Ativos",
-    detailAssetTheory:
-      "Contabilidade de Ativos (FI-AA) gerencia ativos fixos ao longo de seu ciclo de vida, desde a aquisição até a baixa. Ele lida com cálculo de depreciation, avaliações de ativos e integração com GL para lançamentos de ativos. Suporta múltiplos métodos de depreciação e avaliações paralelas de ativos.",
-    detailAssetTechnical:
-      "Tabelas: ANLA (Mestre Ativo), ANLC (Valores Ativo), ANLH (Histórico Ativo). Transações: AS01 (Criar Ativo), AB01 (Lançar Capitalização), AB02 (Lançar Baixa).",
-    detailAssetChecklist: [
-      "Criar mestre de ativo (AS01)",
-      "Lançar aquisição de ativo (AB01)",
-      "Configurar chaves de depreciação",
-      "Executar depreciação periódica",
-      "Lançar baixa de ativo (AB02)",
+    detailFIAPInvoiceTitle: "Processamento Faturas AP & Integração MIRO",
+    detailFIAPInvoiceTheory:
+      "Processamento de faturas AP pode ser manual (FB60, F-43) ou automático via integração MM (MIRO). MIRO vincula verificação de faturas logísticas com FI, garantindo conciliação tripla (PC, RE, Fatura). Lançamentos automáticos são feitos na conta GR/IR e conta de reconciliação de fornecedor.",
+    detailFIAPInvoiceTechnical:
+      "Transações: FB60 (Lançar Fatura), F-43 (Nota de Crédito), MIRO (Verificação de Faturas Logísticas). Tabelas: BSEG (com KOART='K'), RSEG (Itens Documento Fatura), BKPF (Cabeçalho Documento).",
+    detailFIAPInvoiceChecklist: [
+      "Lançar faturas de fornecedores manualmente (FB60)",
+      "Processar faturas logísticas via MIRO",
+      "Tratar notas de crédito e correções",
+      "Verificar reconciliação da conta GR/IR",
     ],
 
-    detailReportingTitle: "Relatórios Financeiros",
-    detailReportingTheory:
-      "Relatórios financeiros no SAP FI fornecem capacidades abrangentes incluindo balanços, demonstrações de resultados e saldos trial. Relatórios podem ser gerados em múltiplos formatos e integrados com SAP Business Warehouse para análise avançada.",
-    detailReportingTechnical:
-      "Relatórios principais: F.01 (Saldo Transportado), F.10 (Lista Contas Contábeis), S_ALR_87012311 (Balanço), S_ALR_87012312 (Demonstração Resultados).",
-    detailReportingChecklist: [
-      "Gerar saldo trial (F.01)",
-      "Executar relatórios de balanço",
-      "Executar demonstrações de resultados",
-      "Usar versões de demonstrações financeiras",
-      "Exportar relatórios para Excel",
+    detailFIPaymentProgramTitle: "Programa Automático de Pagamento (F110)",
+    detailFIPaymentProgramTheory:
+      "O Programa Automático de Pagamento (F110) processa pagamentos de fornecedores baseado em datas de vencimento, termos de pagamento e fundos disponíveis. Ele gera documentos de pagamento, cria meios de pagamento (arquivos eletrônicos/impressão), lança entradas contábeis e atualiza itens abertos de fornecedores. Crítico para gestão de fluxo de caixa.",
+    detailFIPaymentProgramTechnical:
+      "Transações: F110 (Programa Automático de Pagamento), FBZP (Configuração de Pagamento). Tabelas: REGUH (Cabeçalho Proposta Pagamento), REGUP (Itens Pagamento), PAYR (Meio Pagamento).",
+    detailFIPaymentProgramChecklist: [
+      "Configurar métodos de pagamento (cheque, transferência, eletrônico)",
+      "Executar proposta de pagamento e analisar resultados",
+      "Gerar meios de pagamento e lançar documentos de pagamento",
+      "Monitorar status de pagamento e aging de fornecedores",
+    ],
+
+    detailFICustomerMasterTitle: "Dados Mestre Cliente (Visão FI)",
+    detailFICustomerMasterTheory:
+      "Dados Mestre de Cliente no FI incluem dados específicos por código empresa como termos de pagamento, contas de reconciliação, procedimentos de cobrança e gestão de crédito. O conceito de Business Partner (BP) unifica as visões FI e SD. Clientes são críticos para integração AR e cobranças.",
+    detailFICustomerMasterTechnical:
+      "Transações: BP (Business Partner), FD01 (Criar Cliente), XD01 (Cliente Estendido). Tabelas: KNA1 (Cliente Geral), KNB1 (Cliente Código Empresa), KNVV (Cliente Vendas).",
+    detailFICustomerMasterChecklist: [
+      "Criar Business Partner com papéis FI e SD",
+      "Configurar termos de pagamento e contas de reconciliação",
+      "Configurar procedimentos de cobrança e limites de crédito",
+      "Estender cliente para múltiplos códigos empresa",
+    ],
+
+    detailFIARInvoicesTitle: "Faturas AR & Recebimentos",
+    detailFIARInvoicesTheory:
+      "Processamento de faturas AR pode ser manual (FB70) ou automático via integração SD (VF01 faturamento). Recebimentos (F-28) liquidam itens abertos de clientes. O sistema suporta pagamentos parciais, pagamentos residuais e pagamentos a conta. Crítico para coleta de caixa e reconciliação de clientes.",
+    detailFIARInvoicesTechnical:
+      "Transações: FB70 (Lançar Fatura Cliente), F-28 (Recebimento), F-32 (Liquidar Itens Abertos). Tabelas: BSEG (com KOART='D'), BSAD (Itens Cliente Liquidados), BSID (Itens Cliente Abertos).",
+    detailFIARInvoicesChecklist: [
+      "Lançar faturas de clientes manualmente (FB70)",
+      "Processar recebimentos e liquidar itens abertos (F-28)",
+      "Tratar pagamentos parciais e residuais",
+      "Analisar aging de clientes e status de cobrança",
+    ],
+
+    detailFIDunningTitle: "Processo de Cobrança (Collections)",
+    detailFIDunningTheory:
+      "O processo de cobrança automatiza coleta de recebíveis em atraso. Procedimentos de cobrança definem níveis de cobrança, áreas de cobrança e formas de cobrança. O sistema gera cartas de cobrança, cobra juros e pode bloquear clientes para vendas futuras. Essencial para manter fluxo de caixa e disciplina de crédito de clientes.",
+    detailFIDunningTechnical:
+      "Transações: F150 (Execução Cobrança), F1500 (Configuração Cobrança). Tabelas: F150T (Procedimentos Cobrança), FKKMA (Áreas Cobrança), DFKKOP (Itens Cobrados).",
+    detailFIDunningChecklist: [
+      "Configurar procedimentos de cobrança e áreas de cobrança",
+      "Executar proposta de cobrança e analisar resultados",
+      "Gerar cartas de cobrança e lançar juros",
+      "Monitorar histórico de cobrança e bloqueios de clientes",
+    ],
+
+    detailFIAssetMasterTitle: "Dados Mestre de Ativos",
+    detailFIAssetMasterTheory:
+      "Dados Mestre de Ativos capturam informações de ativos fixos incluindo classe de ativo, vida útil, área de depreciação e data de capitalização. Classes de ativo controlam parâmetros específicos de ativos e valores padrão. Ativos integram com GL para lançamentos automáticos de depreciação. Crítico para gestão de ativos fixos e conformidade.",
+    detailFIAssetMasterTechnical:
+      "Transações: AS01 (Criar Ativo), AS02 (Alterar Ativo), AS03 (Exibir Ativo). Tabelas: ANLA (Mestre Ativo), ANLH (Dados Tempo-Dependente Ativo), T090 (Classes de Ativo).",
+    detailFIAssetMasterChecklist: [
+      "Criar registros de mestre de ativos com classe correta",
+      "Configurar áreas de depreciação e vida útil",
+      "Configurar subnúmeros e componentes de ativos",
+      "Entender numeração e intervalos de ativos",
+    ],
+
+    detailFIDepreciationTitle: "Depreciação de Ativos & Baixas",
+    detailFIDepreciationTheory:
+      "Cálculos de depreciação são executados periodicamente (mensal/anual) usando chaves de depreciação definidas em classes de ativo. O sistema suporta depreciação linear, saldo decrescente e métodos especiais de depreciação. Baixas de ativos (venda/sucata) geram lançamentos em contas de ganho/perda e liquidam valores de ativos.",
+    detailFIDepreciationTechnical:
+      "Transações: AW01N (Explorer de Ativos), AFAB (Execução Depreciação), AB01 (Capitalização), AB02 (Baixa). Tabelas: ANLC (Valores Ativo), ANEP (Áreas Depreciação), T090 (Chaves Depreciação).",
+    detailFIDepreciationChecklist: [
+      "Executar depreciação periódica (AFAB)",
+      "Lançar aquisições e capitalizações de ativos (AB01)",
+      "Processar baixas e transferências de ativos (AB02)",
+      "Analisar valores de ativos no Explorer (AW01N)",
+    ],
+
+    detailFIBankStatementTitle: "Extrato Bancário Eletrônico (EBS)",
+    detailFIBankStatementTheory:
+      "Extrato Bancário Eletrônico (EBS) automatiza reconciliação bancária importando arquivos de extrato bancário. O sistema lança transações bancárias, liquida itens abertos e atualiza saldos bancários. EBS elimina reconciliação manual e fornece visibilidade em tempo real da posição de caixa. Crítico para gestão de tesouraria.",
+    detailFIBankStatementTechnical:
+      "Transações: FF_5 (Extrato Bancário Manual), FF.5 (Extrato Bancário Eletrônico), FEBA (Pós-Processamento). Tabelas: FEBKO (Cabeçalho Extrato), FEBEP (Itens Extrato), BNKA (Mestre Bancário).",
+    detailFIBankStatementChecklist: [
+      "Configurar contas bancárias e formatos de extrato",
+      "Importar e processar extratos bancários eletrônicos (FF.5)",
+      "Pós-processar itens não atribuídos (FEBA)",
+      "Reconciliar contas bancárias automaticamente",
+    ],
+
+    detailFIReportingTitle: "Relatórios Financeiros & Balancete",
+    detailFIReportingTheory:
+      "Relatórios financeiros fornecem análise abrangente de dados financeiros incluindo balancetes, balanços, demonstrações de resultados e fluxos de caixa. Relatórios podem ser gerados para qualquer período e código empresa. Versões de Demonstrações Financeiras (FSV) definem a estrutura para relatórios de balanço e P&L.",
+    detailFIReportingTechnical:
+      "Transações: F.01 (Saldo Transportado), F.01 (Balancete), S_ALR_87012284 (Balanço), S_ALR_87012285 (Demonstração Resultados), FAGLL03 (Itens GL). Tabelas: SKB1, BKPF, BSEG, FAGLFLEXT (Novo GL).",
+    detailFIReportingChecklist: [
+      "Gerar balancete (F.01)",
+      "Executar relatórios de balanço e P&L",
+      "Configurar Versões de Demonstrações Financeiras (FSV)",
+      "Analisar itens GL e drill-down (FAGLL03)",
+    ],
+
+    detailFIClosingTitle: "Atividades de Fechamento Mensal",
+    detailFIClosingTheory:
+      "Fechamento mensal garante que todas as transações financeiras sejam registradas, reconciliadas e reportadas para o período. Atividades incluem bloqueio de períodos (OB52), avaliação de moeda estrangeira (FAGL_FCV), accruals e deferrals, reconciliação GR/IR e relatórios financeiros. Crítico para demonstrações financeiras precisas e conformidade.",
+    detailFIClosingTechnical:
+      "Transações: OB52 (Períodos de Lançamento), FAGL_FCV (Avaliação Moeda Estrangeira), OB08 (Taxas de Câmbio), F.13 (Liquidação Automática), MB5S (Reconciliação GR/IR). Tabelas: T001B (Períodos Lançamento), TCURR (Taxas Câmbio), BKPF, BSEG.",
+    detailFIClosingChecklist: [
+      "Bloquear períodos de lançamento (OB52)",
+      "Executar avaliação de moeda estrangeira (FAGL_FCV)",
+      "Reconciliar contas GR/IR e sub-ledgers",
+      "Gerar e validar demonstrações financeiras",
     ],
 
     // ===== SAP MM CONSULTANT =====
